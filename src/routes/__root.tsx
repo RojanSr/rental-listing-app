@@ -15,7 +15,7 @@ interface MyRouterContext {
 export const Route = createRootRouteWithContext<MyRouterContext>()({
   component: () => (
     <>
-      <div className="container mx-auto">
+      <div className="mx-auto w-full max-w-[1800px] p-4 lg:px-8">
         <Navbar />
         <Outlet />
       </div>

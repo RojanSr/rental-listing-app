@@ -1,10 +1,16 @@
+import Listing from '@/features/listing'
+import LandingSearch from '@/features/listing/search/LandingSearch'
 import { createFileRoute } from '@tanstack/react-router'
-import Landing from '@/features/ui/Landing/Landing'
 
 export const Route = createFileRoute('/')({
   component: App,
 })
 
 function App() {
-  return <Landing />
+  return (
+    <div>
+      <LandingSearch />
+      <Listing />
+    </div>
+  )
 }

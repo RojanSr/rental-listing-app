@@ -14,7 +14,7 @@ const AuthDialog = ({ open, onOpenChange }: DialogProps) => {
         <DialogHeader>
           <DialogTitle className="text-center">Log in or sign up</DialogTitle>
           <DialogDescription className="text-black border-t-2 py-4 border-t-zinc-300">
-            <p className="text-xl font-medium">Welcome to BasooBas.com</p>
+            <p className="text-xl font-medium">Welcome to BasoBaas.com</p>
           </DialogDescription>
         </DialogHeader>
       </DialogContent>

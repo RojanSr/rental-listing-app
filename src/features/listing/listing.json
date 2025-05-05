@@ -1,0 +1,65 @@
+[
+  {
+    "id": 1,
+    "imgSrc": "/src/assets/testImage.jpg",
+    "location": "Kathmandu, Nepal",
+    "postedBy": "Jennifer",
+    "postDate": "3 days ago",
+    "rate": 30000,
+    "currency": "npr"
+  },
+  {
+    "id": 1,
+    "imgSrc": "/src/assets/app_design.jpg",
+    "location": "Kathmandu, Nepal",
+    "postedBy": "Jennifer",
+    "postDate": "3 days ago",
+    "rate": 30000,
+    "currency": "npr"
+  },
+  {
+    "id": 1,
+    "imgSrc": "/src/assets/testImage.jpg",
+    "location": "Kathmandu, Nepal",
+    "postedBy": "Jennifer",
+    "postDate": "3 days ago",
+    "rate": 30000,
+    "currency": "npr"
+  },
+  {
+    "id": 1,
+    "imgSrc": "/src/assets/testImage.jpg",
+    "location": "Kathmandu, Nepal",
+    "postedBy": "Jennifer",
+    "postDate": "3 days ago",
+    "rate": 30000,
+    "currency": "npr"
+  },
+  {
+    "id": 1,
+    "imgSrc": "/src/assets/testImage.jpg",
+    "location": "Kathmandu, Nepal",
+    "postedBy": "Jennifer",
+    "postDate": "3 days ago",
+    "rate": 30000,
+    "currency": "npr"
+  },
+  {
+    "id": 1,
+    "imgSrc": "/src/assets/testImage.jpg",
+    "location": "Kathmandu, Nepal",
+    "postedBy": "Jennifer",
+    "postDate": "3 days ago",
+    "rate": 30000,
+    "currency": "npr"
+  },
+  {
+    "id": 1,
+    "imgSrc": "/src/assets/testImage.jpg",
+    "location": "Kathmandu, Nepal",
+    "postedBy": "Jennifer",
+    "postDate": "3 days ago",
+    "rate": 30000,
+    "currency": "npr"
+  }
+]

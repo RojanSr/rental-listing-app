@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react'
-import SearchSuggestions from './SearchSuggestions'
 import { Input } from '@/components/ui/input'
+import SearchSuggestions from './SearchSuggestions'
 
 const LandingSearch = () => {
   const [isFocused, setIsFocused] = useState(false)

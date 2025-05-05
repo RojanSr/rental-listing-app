@@ -8,7 +8,7 @@ import {
 const Footer = () => {
   return (
     <footer className="pt-8 px-4 flex flex-col text-zinc-400 bg-black">
-      <div className="container mx-auto">
+      <div className="mx-auto w-full max-w-[1800px] p-4 lg:px-8">
         <div className="flex gap-6 justify-between flex-grow pb-12  border-solid border-b-[1px] border-b-zinc-700 flex-wrap">
           <div className="flex flex-col gap-4">
             <AppLogo />
@@ -18,7 +18,7 @@ const Footer = () => {
             </div>
             <div className="flex items-center gap-3">
               <MailIcon />
-              <p>basoobas@gmail.com</p>
+              <p>basobaas@gmail.com</p>
             </div>
             <div className="flex items-center gap-3">
               <MapPinIcon />
@@ -40,8 +40,7 @@ const Footer = () => {
           <div className="flex flex-col gap-4">
             <p className="font-bold text-zinc-300">Subscribe</p>
             <p>
-              Enter your email below to be the first to know about new
-              collections and product launches.
+              Enter your email below to be the first to know about new upcomings
             </p>
             <input
               placeholder="Your Email"
@@ -51,7 +50,7 @@ const Footer = () => {
         </div>
         {/* <div className="py-4 flex flex-wrap justify-between gap-3"> */}
         <p className="text-center my-4">
-          ©2025 BasooBas All Rights are reserved
+          ©2025 BasoBaas All Rights are reserved
         </p>
         {/* </div> */}
       </div>
