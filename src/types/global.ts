@@ -1,1 +1,1 @@
-export type HomeViewType = 'rent' | 'buy'
+export type Category = 'room' | 'flat' | 'apartment' | 'house'

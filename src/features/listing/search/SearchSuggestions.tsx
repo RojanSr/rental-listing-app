@@ -1,9 +1,25 @@
+import type { GeocodingResult } from '@/api/services/geocoding/types'
+import { Skeleton } from '@/components/ui/skeleton'
+import type { UseQueryResult } from '@tanstack/react-query'
 import { Building2, MapPin, Mountain } from 'lucide-react'
 import type { Ref } from 'react'
 
 type SearchSuggestionsProps = {
   open: boolean
   ref: Ref<HTMLDivElement>
+  search: {
+    value: string
+    lat: number | undefined
+    lon: number | undefined
+  }
+  locationSuggestion: UseQueryResult<GeocodingResult, Error>
+  setSearch: React.Dispatch<
+    React.SetStateAction<{
+      value: string
+      lat: number | undefined
+      lon: number | undefined
+    }>
+  >
 }
 
 const INITIAL_SUGGESTED_PLACES = [
@@ -30,22 +46,13 @@ const INITIAL_SUGGESTED_PLACES = [
   },
 ]
 
-const SearchSuggestions = ({ open, ref }: SearchSuggestionsProps) => {
+const InitialSuggestion = () => {
   return (
-    <div
-      ref={ref}
-      className={`absolute top-full left-0 min-w-md mt-2 rounded-3xl p-4 bg-white shadow-lg border border-gray-200 origin-top transform transition-all duration-300 ease-in-out ${
-        open
-          ? 'scale-y-100 opacity-100 pointer-events-auto'
-          : 'scale-y-0 opacity-0 pointer-events-none'
-      }`}
-    >
-      <p className="text-sm">Suggested places</p>
-
+    <>
       {INITIAL_SUGGESTED_PLACES?.map((item) => (
         <div
           key={item.id}
-          className="flex gap-3 items-center mt-3 hover:bg-zinc-100 p-2 rounded-2xl"
+          className="cursor-pointer flex gap-3 items-center mt-3 hover:bg-zinc-100 p-2 rounded-2xl"
         >
           <div
             className="w-12 h-12 rounded-md grid place-items-center"
@@ -54,11 +61,84 @@ const SearchSuggestions = ({ open, ref }: SearchSuggestionsProps) => {
             <item.icon color={`rgb(${item.colorCode})`} />
           </div>
           <div>
-            <p className="font-medium text-md">{item.name}</p>
+            <p className="text-md">{item.name}</p>
             <p className="text-zinc-500 text-sm">{item.description}</p>
           </div>
         </div>
       ))}
+    </>
+  )
+}
+
+const QuerySuggestion = ({
+  locationSuggestion,
+  setSearch,
+}: Pick<SearchSuggestionsProps, 'locationSuggestion' | 'setSearch'>) => {
+  if (locationSuggestion.isLoading || locationSuggestion.isFetching) {
+    return (
+      <div className="flex items-center space-x-4 my-2">
+        <div className="space-y-2 mt-2">
+          <Skeleton className="h-8 w-[300px]" />
+          <Skeleton className="h-8 w-[350px]" />
+        </div>
+      </div>
+    )
+  }
+
+  if (!locationSuggestion.data?.features?.length) {
+    return <p className="text-center my-4">No suggestion found</p>
+  }
+
+  return (
+    <>
+      {locationSuggestion.data?.features?.map((item) => {
+        const location = item.properties
+        return (
+          <div
+            key={location.place_id}
+            className="cursor-pointer flex gap-3 items-center mt-3 hover:bg-zinc-100 py-4 px-2 rounded-md"
+            onClick={() => {
+              console.log('clicking')
+              setSearch({
+                value: location.formatted,
+                lat: location.lat,
+                lon: location.lon,
+              })
+            }}
+          >
+            <MapPin size={32} />
+            <p className="text-md">{location.formatted}</p>
+          </div>
+        )
+      })}
+    </>
+  )
+}
+
+const SearchSuggestions = ({
+  open,
+  ref,
+  locationSuggestion,
+  search,
+  setSearch,
+}: SearchSuggestionsProps) => {
+  return (
+    <div
+      ref={ref}
+      className={`absolute z-50 top-full left-0 min-w-md mt-2 rounded-3xl p-4 bg-white shadow-sm border border-gray-200 origin-top transform transition-all duration-300 ease-in-out ${
+        open ? 'scale-y-100 opacity-100' : 'scale-y-0 opacity-0'
+      }`}
+    >
+      <p className="select-none text-sm">Suggested places</p>
+
+      {!search.value || !locationSuggestion.data ? (
+        <InitialSuggestion />
+      ) : (
+        <QuerySuggestion
+          locationSuggestion={locationSuggestion}
+          setSearch={setSearch}
+        />
+      )}
     </div>
   )
 }

@@ -1,65 +1,65 @@
 [
   {
     "id": 1,
+    "title": "New House on Rent near Kamaladi",
     "imgSrc": "/src/assets/testImage.jpg",
-    "location": "Kathmandu, Nepal",
-    "postedBy": "Jennifer",
-    "postDate": "3 days ago",
+    "location": "Kalopul, Kathmandu",
+    "category": "flat",
     "rate": 30000,
-    "currency": "npr"
+    "bhk": 2
   },
   {
-    "id": 1,
+    "id": 2,
+    "title": "Thakuri Niwas",
     "imgSrc": "/src/assets/app_design.jpg",
-    "location": "Kathmandu, Nepal",
-    "postedBy": "Jennifer",
-    "postDate": "3 days ago",
-    "rate": 30000,
-    "currency": "npr"
+    "location": "Pulchowk, Lalitpur",
+    "category": "apartment",
+    "rate": 17000,
+    "bhk": 2
   },
   {
-    "id": 1,
+    "id": 3,
+    "title": "Thakuri Niwas",
     "imgSrc": "/src/assets/testImage.jpg",
-    "location": "Kathmandu, Nepal",
-    "postedBy": "Jennifer",
-    "postDate": "3 days ago",
-    "rate": 30000,
-    "currency": "npr"
+    "location": "Dharan, Nepal",
+    "category": "flat",
+    "rate": 18000,
+    "bhk": 2
   },
   {
-    "id": 1,
+    "id": 4,
+    "title": "Thakuri Niwas",
     "imgSrc": "/src/assets/testImage.jpg",
     "location": "Kathmandu, Nepal",
-    "postedBy": "Jennifer",
-    "postDate": "3 days ago",
-    "rate": 30000,
-    "currency": "npr"
+    "category": "flat",
+    "rate": 12000,
+    "bhk": 2
   },
   {
-    "id": 1,
+    "id": 5,
+    "title": "Thakuri Niwas",
     "imgSrc": "/src/assets/testImage.jpg",
     "location": "Kathmandu, Nepal",
-    "postedBy": "Jennifer",
-    "postDate": "3 days ago",
-    "rate": 30000,
-    "currency": "npr"
+    "category": "flat",
+    "rate": 80000,
+    "bhk": 2
   },
   {
-    "id": 1,
+    "id": 6,
+    "title": "Thakuri Niwas",
     "imgSrc": "/src/assets/testImage.jpg",
     "location": "Kathmandu, Nepal",
-    "postedBy": "Jennifer",
-    "postDate": "3 days ago",
+    "category": "flat",
     "rate": 30000,
-    "currency": "npr"
+    "bhk": 2
   },
   {
-    "id": 1,
+    "id": 7,
+    "title": "Thakuri Niwas",
     "imgSrc": "/src/assets/testImage.jpg",
     "location": "Kathmandu, Nepal",
-    "postedBy": "Jennifer",
-    "postDate": "3 days ago",
+    "category": "flat",
     "rate": 30000,
-    "currency": "npr"
+    "bhk": 2
   }
 ]

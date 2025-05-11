@@ -18,7 +18,7 @@ const Footer = () => {
             </div>
             <div className="flex items-center gap-3">
               <MailIcon />
-              <p>basobaas@gmail.com</p>
+              <p>GharBaas@gmail.com</p>
             </div>
             <div className="flex items-center gap-3">
               <MapPinIcon />
@@ -50,7 +50,7 @@ const Footer = () => {
         </div>
         {/* <div className="py-4 flex flex-wrap justify-between gap-3"> */}
         <p className="text-center my-4">
-          ©2025 BasoBaas All Rights are reserved
+          ©2025 GharBaas All Rights are reserved
         </p>
         {/* </div> */}
       </div>

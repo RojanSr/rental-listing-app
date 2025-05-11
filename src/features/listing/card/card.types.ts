@@ -1,9 +1,11 @@
+import type { Category } from '@/types/global'
+
 export type ListingCardType = {
   id: number
+  title: string
+  category: Category
+  bhk: number
   imgSrc: string
   location: string
-  postedBy: string
-  postDate: string
   rate: number
-  currency: string
 }
