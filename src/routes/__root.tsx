@@ -14,16 +14,16 @@ interface MyRouterContext {
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({
   component: () => (
-    <>
-      <div className="mx-auto w-full max-w-[1800px] p-4 lg:px-8">
-        <Navbar />
+    <div className="flex flex-col min-h-screen">
+      <Navbar />
+      <div className="grow">
         <Outlet />
       </div>
       <Footer />
       <TanStackRouterDevtools />
 
       <TanstackQueryLayout />
-    </>
+    </div>
   ),
   notFoundComponent: NotFound,
 })

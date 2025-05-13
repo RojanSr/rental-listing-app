@@ -3,7 +3,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import type { UseQueryResult } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 import { Building2, MapPin, Mountain } from 'lucide-react'
-import type { Ref } from 'react'
+import { type Ref } from 'react'
 
 type SearchSuggestionsProps = {
   open: boolean
@@ -30,6 +30,10 @@ const INITIAL_SUGGESTED_PLACES = [
     description: "Find what's around you",
     icon: MapPin,
     colorCode: '62, 127, 179',
+    coord: {
+      lat: 0,
+      lon: 0,
+    },
   },
   {
     id: 2,
@@ -37,6 +41,10 @@ const INITIAL_SUGGESTED_PLACES = [
     description: 'For city services',
     icon: Building2,
     colorCode: '13, 109, 25',
+    coord: {
+      lat: 27.7103,
+      lon: 85.3222,
+    },
   },
   {
     id: 3,
@@ -44,16 +52,61 @@ const INITIAL_SUGGESTED_PLACES = [
     description: 'For nature-lovers',
     icon: Mountain,
     colorCode: '62, 127, 179',
+    coord: {
+      lat: 28.2096,
+      lon: 83.9856,
+    },
   },
 ]
 
-const InitialSuggestion = () => {
+const InitialSuggestion = ({
+  setSearch,
+}: Pick<SearchSuggestionsProps, 'setSearch'>) => {
+  const navigate = useNavigate()
+
+  const onClickNavigate = (query: string, lat: number, lon: number) => {
+    setSearch({
+      value: query,
+      lat,
+      lon,
+    })
+    navigate({
+      to: '/search',
+      search: {
+        query,
+        lat,
+        lon,
+      },
+    })
+  }
+
+  const getUserLocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords
+          onClickNavigate('Nearby', latitude, longitude)
+        },
+
+        (error) => {
+          console.error('Error get user location: ', error)
+        },
+      )
+    } else {
+      console.log('Geolocation is not supported by this browser')
+    }
+  }
   return (
     <>
       {INITIAL_SUGGESTED_PLACES?.map((item) => (
         <div
           key={item.id}
           className="cursor-pointer flex gap-3 items-center mt-3 hover:bg-zinc-100 p-2 rounded-2xl"
+          onClick={
+            item.id === 1
+              ? getUserLocation
+              : () => onClickNavigate(item.name, item.coord.lat, item.coord.lon)
+          }
         >
           <div
             className="w-12 h-12 rounded-md grid place-items-center"
@@ -141,7 +194,7 @@ const SearchSuggestions = ({
       <p className="select-none text-sm">Suggested places</p>
 
       {!search.value || !locationSuggestion.data ? (
-        <InitialSuggestion />
+        <InitialSuggestion setSearch={setSearch} />
       ) : (
         <QuerySuggestion
           locationSuggestion={locationSuggestion}

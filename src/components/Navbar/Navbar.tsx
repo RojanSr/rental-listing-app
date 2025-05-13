@@ -12,51 +12,55 @@ import NoAvatarSVG from '@/assets/user/no_avatar.svg'
 import AuthDialog from '../auth/AuthDialog'
 import { useToggle } from '@/hooks/useToggle'
 import { Link } from '@tanstack/react-router'
+import LandingSearch from '@/features/listing/search/LandingSearch'
 
 const Navbar = () => {
   const [authDialogOpen, toggleAuthDialog] = useToggle(false)
   return (
-    <nav className="flex items-center gap-4 justify-between text-lg mb-2">
-      <Link to="/">
-        <AppLogo />
-      </Link>
-      <DropdownMenu>
-        <DropdownMenuTrigger>
-          <div className="border-2 border-zinc-300 hover:shadow-[0px_10px_19px_rgba(0,0,0,0.1)] transition-all py-2 px-4 rounded-full flex items-center gap-4 cursor-pointer">
-            <MenuIcon width={'1.2rem'} />
-            <Avatar className="w-[35px] h-[35px]">
-              <AvatarImage src={NoAvatarSVG} alt="@shadcn" />
-              <AvatarFallback>CN</AvatarFallback>
-            </Avatar>
-          </div>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent
-          align="end"
-          onCloseAutoFocus={(e) => e.preventDefault()}
-          className="px-0 min-w-[240px] "
-        >
-          <DropdownMenuItem
-            className="font-semibold px-3 py-4 text-sm rounded-none"
-            onClick={toggleAuthDialog}
+    <nav className=" py-2 border-b-1">
+      <div className="flex items-center gap-4 justify-between text-lg app-container">
+        <Link to="/">
+          <AppLogo />
+        </Link>
+        <LandingSearch />
+        <DropdownMenu>
+          <DropdownMenuTrigger>
+            <div className="border-2 border-zinc-300 hover:shadow-[0px_10px_19px_rgba(0,0,0,0.1)] transition-all py-2 px-4 rounded-full flex items-center gap-4 cursor-pointer">
+              <MenuIcon width={'1.2rem'} />
+              <Avatar className="w-[35px] h-[35px]">
+                <AvatarImage src={NoAvatarSVG} alt="@shadcn" />
+                <AvatarFallback>CN</AvatarFallback>
+              </Avatar>
+            </div>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent
+            align="end"
+            onCloseAutoFocus={(e) => e.preventDefault()}
+            className="px-0 min-w-[240px] "
           >
-            Sign Up
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            className="px-3 py-4 text-sm rounded-none"
-            onClick={toggleAuthDialog}
-          >
-            Login In
-          </DropdownMenuItem>
-          <DropdownMenuSeparator className="bg-zinc-300" />
-          <DropdownMenuItem className="px-3 py-4 text-sm rounded-none">
-            Register your shed
-          </DropdownMenuItem>
-          <DropdownMenuItem className="px-3 py-4 text-sm rounded-none">
-            Help Center
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-      <AuthDialog open={authDialogOpen} onOpenChange={toggleAuthDialog} />
+            <DropdownMenuItem
+              className="font-semibold px-3 py-4 text-sm rounded-none"
+              onClick={toggleAuthDialog}
+            >
+              Sign Up
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              className="px-3 py-4 text-sm rounded-none"
+              onClick={toggleAuthDialog}
+            >
+              Login In
+            </DropdownMenuItem>
+            <DropdownMenuSeparator className="bg-zinc-300" />
+            <DropdownMenuItem className="px-3 py-4 text-sm rounded-none">
+              Register your shed
+            </DropdownMenuItem>
+            <DropdownMenuItem className="px-3 py-4 text-sm rounded-none">
+              Help Center
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+        <AuthDialog open={authDialogOpen} onOpenChange={toggleAuthDialog} />
+      </div>
     </nav>
   )
 }

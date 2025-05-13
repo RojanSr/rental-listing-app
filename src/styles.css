@@ -20,8 +20,12 @@ code {
     source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
+.app-container {
+  @apply mx-auto w-full max-w-[1800px] p-4 lg:px-8;
+}
+
 :root {
-  --theme: #a7333f;
+  --theme: #de3c4b;
   --background: oklch(1 0 0);
   --foreground: oklch(0.141 0.005 285.823);
   --card: oklch(1 0 0);

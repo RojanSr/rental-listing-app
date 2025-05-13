@@ -31,7 +31,7 @@
     "title": "Thakuri Niwas",
     "imgSrc": "/src/assets/testImage.jpg",
     "location": "Kathmandu, Nepal",
-    "category": "flat",
+    "category": "room",
     "rate": 12000,
     "bhk": 2
   },
@@ -49,7 +49,7 @@
     "title": "Thakuri Niwas",
     "imgSrc": "/src/assets/testImage.jpg",
     "location": "Kathmandu, Nepal",
-    "category": "flat",
+    "category": "room",
     "rate": 30000,
     "bhk": 2
   },

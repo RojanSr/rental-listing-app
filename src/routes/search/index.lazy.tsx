@@ -70,31 +70,25 @@ function RouteComponent() {
 
   return (
     <div>
-      <p className="py-4 text-lg">
-        Search result for: <span className="font-medium">{query}</span>
-      </p>
-
-      <div className="mb-4">
-        <label className="mr-2 font-medium">Map Style:</label>
-        <select
-          value={activeStyle}
-          onChange={(e) => setActiveStyle(e.target.value)}
-          className="px-2 py-1 border border-gray-300 rounded"
-        >
-          {Object.entries(mapStyles).map(([key, style]) => (
-            <option key={key} value={key}>
-              {style.name}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      <div className="flex gap-4">
-        <div className="flex-1">
+      <div className="flex gap-4 flex-col md:flex-row">
+        <div className="flex-1 h-[30dvh] md:h-[80dvh] relative">
+          <div className="absolute z-10 bottom-0 ">
+            <select
+              value={activeStyle}
+              onChange={(e) => setActiveStyle(e.target.value)}
+              className="px-4 py-2 text-sm border bg-white"
+            >
+              {Object.entries(mapStyles).map(([key, style]) => (
+                <option key={key} value={key}>
+                  {style.name}
+                </option>
+              ))}
+            </select>
+          </div>
           <MapContainer
             center={position}
             zoom={15}
-            style={{ height: '600px', width: '100%' }}
+            style={{ height: 'inherit', width: '100%', zIndex: 1 }}
           >
             <TileLayer
               url={mapStyles[activeStyle as keyof typeof mapStyles].url}
