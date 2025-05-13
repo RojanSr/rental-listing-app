@@ -8,10 +8,17 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
+import { createFileRoute } from '@tanstack/react-router'
+
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as IndexImport } from './routes/index'
+import { Route as SearchIndexImport } from './routes/search/index'
+
+// Create Virtual Routes
+
+const PostPostIdLazyImport = createFileRoute('/post/$postId')()
 
 // Create/Update Routes
 
@@ -20,6 +27,18 @@ const IndexRoute = IndexImport.update({
   path: '/',
   getParentRoute: () => rootRoute,
 } as any)
+
+const SearchIndexRoute = SearchIndexImport.update({
+  id: '/search/',
+  path: '/search/',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/search/index.lazy').then((d) => d.Route))
+
+const PostPostIdLazyRoute = PostPostIdLazyImport.update({
+  id: '/post/$postId',
+  path: '/post/$postId',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/post/$postId.lazy').then((d) => d.Route))
 
 // Populate the FileRoutesByPath interface
 
@@ -32,6 +51,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
+    '/post/$postId': {
+      id: '/post/$postId'
+      path: '/post/$postId'
+      fullPath: '/post/$postId'
+      preLoaderRoute: typeof PostPostIdLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/search/': {
+      id: '/search/'
+      path: '/search'
+      fullPath: '/search'
+      preLoaderRoute: typeof SearchIndexImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -39,32 +72,42 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/post/$postId': typeof PostPostIdLazyRoute
+  '/search': typeof SearchIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/post/$postId': typeof PostPostIdLazyRoute
+  '/search': typeof SearchIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/post/$postId': typeof PostPostIdLazyRoute
+  '/search/': typeof SearchIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/post/$postId' | '/search'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/post/$postId' | '/search'
+  id: '__root__' | '/' | '/post/$postId' | '/search/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  PostPostIdLazyRoute: typeof PostPostIdLazyRoute
+  SearchIndexRoute: typeof SearchIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  PostPostIdLazyRoute: PostPostIdLazyRoute,
+  SearchIndexRoute: SearchIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -77,11 +120,19 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/"
+        "/",
+        "/post/$postId",
+        "/search/"
       ]
     },
     "/": {
       "filePath": "index.tsx"
+    },
+    "/post/$postId": {
+      "filePath": "post/$postId.lazy.tsx"
+    },
+    "/search/": {
+      "filePath": "search/index.tsx"
     }
   }
 }

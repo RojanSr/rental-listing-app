@@ -9,6 +9,7 @@ import * as TanstackQuery from './integrations/tanstack-query/root-provider'
 import { routeTree } from './routeTree.gen'
 
 import './styles.css'
+import 'leaflet/dist/leaflet.css'
 import reportWebVitals from './reportWebVitals.ts'
 import ErrorComponent from './components/feedback/ErrorComponent.tsx'
 

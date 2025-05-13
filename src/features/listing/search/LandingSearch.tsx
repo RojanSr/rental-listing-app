@@ -14,7 +14,6 @@ const LandingSearch = () => {
     lat: undefined,
     lon: undefined,
   })
-  console.log(search, 'search')
   const debouncedSearch = useDebounce(search, 500)
 
   const [isFocused, setIsFocused] = useState(false)

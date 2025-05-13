@@ -11,12 +11,15 @@ import {
 import NoAvatarSVG from '@/assets/user/no_avatar.svg'
 import AuthDialog from '../auth/AuthDialog'
 import { useToggle } from '@/hooks/useToggle'
+import { Link } from '@tanstack/react-router'
 
 const Navbar = () => {
   const [authDialogOpen, toggleAuthDialog] = useToggle(false)
   return (
     <nav className="flex items-center gap-4 justify-between text-lg mb-2">
-      <AppLogo />
+      <Link to="/">
+        <AppLogo />
+      </Link>
       <DropdownMenu>
         <DropdownMenuTrigger>
           <div className="border-2 border-zinc-300 hover:shadow-[0px_10px_19px_rgba(0,0,0,0.1)] transition-all py-2 px-4 rounded-full flex items-center gap-4 cursor-pointer">

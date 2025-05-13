@@ -1,6 +1,7 @@
 import type { GeocodingResult } from '@/api/services/geocoding/types'
 import { Skeleton } from '@/components/ui/skeleton'
 import type { UseQueryResult } from '@tanstack/react-query'
+import { useNavigate } from '@tanstack/react-router'
 import { Building2, MapPin, Mountain } from 'lucide-react'
 import type { Ref } from 'react'
 
@@ -74,6 +75,7 @@ const QuerySuggestion = ({
   locationSuggestion,
   setSearch,
 }: Pick<SearchSuggestionsProps, 'locationSuggestion' | 'setSearch'>) => {
+  const navigate = useNavigate()
   if (locationSuggestion.isLoading || locationSuggestion.isFetching) {
     return (
       <div className="flex items-center space-x-4 my-2">
@@ -98,11 +100,18 @@ const QuerySuggestion = ({
             key={location.place_id}
             className="cursor-pointer flex gap-3 items-center mt-3 hover:bg-zinc-100 py-4 px-2 rounded-md"
             onClick={() => {
-              console.log('clicking')
               setSearch({
                 value: location.formatted,
                 lat: location.lat,
                 lon: location.lon,
+              })
+              navigate({
+                to: '/search',
+                search: {
+                  query: location.formatted,
+                  lat: location.lat,
+                  lon: location.lon,
+                },
               })
             }}
           >

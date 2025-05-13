@@ -10,7 +10,7 @@ const ListingCard = ({
   bhk,
 }: ListingCardType) => {
   return (
-    <div className="cursor-pointer select-none hover:brightness-90 transition-all duration-300 border border-black/10 shadow-[0px_0px_2px_rgba(0,0,0,0.075)] rounded-xl">
+    <div className="cursor-pointer select-none hover:brightness-90 transition-all duration-300 border border-black/10 shadow-[0px_0px_2px_rgba(0,0,0,0.075)] rounded-xl hover:bg-neutral-50">
       <img
         src={imgSrc}
         alt="Couldn't load the image"
