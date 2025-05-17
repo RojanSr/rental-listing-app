@@ -3,17 +3,14 @@ import { Input } from '@/components/ui/input'
 import SearchSuggestions from './SearchSuggestions'
 import { useSearchLocations } from '@/api/services/geocoding/queries'
 import { useDebounce } from '@/hooks/useDebounce'
+import type { SearchState } from '@/components/Navbar/Navbar'
 
-const LandingSearch = () => {
-  const [search, setSearch] = useState<{
-    value: string
-    lat: number | undefined
-    lon: number | undefined
-  }>({
-    value: '',
-    lat: undefined,
-    lon: undefined,
-  })
+type LandingSearchProps = {
+  setSearch: React.Dispatch<React.SetStateAction<SearchState>>
+  search: SearchState
+}
+
+const LandingSearch = ({ search, setSearch }: LandingSearchProps) => {
   const debouncedSearch = useDebounce(search, 500)
 
   const [isFocused, setIsFocused] = useState(false)

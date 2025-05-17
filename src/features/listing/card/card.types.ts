@@ -8,4 +8,7 @@ export type ListingCardType = {
   imgSrc: string
   location: string
   rate: number
+  longitude: number
+  latitude: number
+  orientation?: 'vertical' | 'horizontal'
 }

@@ -1,8 +1,12 @@
-import { createLazyFileRoute } from '@tanstack/react-router'
+import { createLazyFileRoute, Link } from '@tanstack/react-router'
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { useState } from 'react'
+import ListingCard from '@/features/listing/card/ListingCard'
+import { AnimatePresence, motion } from 'framer-motion'
+import TestListing from '@/features/listing/listing.json'
+import type { Category } from '@/types/global'
 
 // Fix default icon issue
 delete (L.Icon.Default.prototype as any)._getIconUrl
@@ -66,12 +70,10 @@ function RouteComponent() {
     )
   }
 
-  const position: [number, number] = [Number(lat), Number(lon)]
-
   return (
-    <div>
+    <div key={query}>
       <div className="flex gap-4 flex-col md:flex-row">
-        <div className="flex-1 h-[30dvh] md:h-[80dvh] relative">
+        <div className="flex-1 h-[30dvh] md:h-[90dvh] sticky top-[104px]">
           <div className="absolute z-10 bottom-0 ">
             <select
               value={activeStyle}
@@ -86,7 +88,7 @@ function RouteComponent() {
             </select>
           </div>
           <MapContainer
-            center={position}
+            center={[lat, lon]}
             zoom={15}
             style={{ height: 'inherit', width: '100%', zIndex: 1 }}
           >
@@ -96,18 +98,52 @@ function RouteComponent() {
                 mapStyles[activeStyle as keyof typeof mapStyles].attribution
               }
             />
-            <Marker position={position}>
-              <Popup>
-                <div>
-                  <strong>{query}</strong>
-                  <br />
-                  Location: {lat}, {lon}
-                </div>
-              </Popup>
-            </Marker>
+            {TestListing.map((listing) => (
+              <Marker
+                key={listing.id}
+                position={[listing.latitude, listing.longitude]}
+                riseOnHover
+              >
+                <Popup>
+                  <Link
+                    to="/post/$postId"
+                    params={{ postId: listing.id?.toString() }}
+                    target="_blank"
+                  >
+                    <div>
+                      <strong>{listing.title}</strong>
+                      <br />
+                      Location: {lat}, {lon}
+                    </div>
+                  </Link>
+                </Popup>
+              </Marker>
+            ))}
           </MapContainer>
         </div>
-        <div className="flex-1 h-20"></div>
+        <div className="flex-1">
+          <AnimatePresence initial={false}>
+            {TestListing.map((listing) => (
+              <motion.div
+                key={listing.id}
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                transition={{ duration: 0.2 }}
+                style={{
+                  marginBottom: 16,
+                  marginTop: 16,
+                }}
+              >
+                <ListingCard
+                  {...listing}
+                  category={listing.category as Category} // TODO: Remove this in future. Type assertion used due to type issue from json
+                  orientation="horizontal"
+                />
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        </div>
       </div>
     </div>
   )

@@ -1,4 +1,5 @@
 import type { GeocodingResult } from '@/api/services/geocoding/types'
+import type { SearchState } from '@/components/Navbar/Navbar'
 import { Skeleton } from '@/components/ui/skeleton'
 import type { UseQueryResult } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
@@ -8,19 +9,9 @@ import { type Ref } from 'react'
 type SearchSuggestionsProps = {
   open: boolean
   ref: Ref<HTMLDivElement>
-  search: {
-    value: string
-    lat: number | undefined
-    lon: number | undefined
-  }
+  search: SearchState
   locationSuggestion: UseQueryResult<GeocodingResult, Error>
-  setSearch: React.Dispatch<
-    React.SetStateAction<{
-      value: string
-      lat: number | undefined
-      lon: number | undefined
-    }>
-  >
+  setSearch: React.Dispatch<React.SetStateAction<SearchState>>
 }
 
 const INITIAL_SUGGESTED_PLACES = [
@@ -63,7 +54,6 @@ const InitialSuggestion = ({
   setSearch,
 }: Pick<SearchSuggestionsProps, 'setSearch'>) => {
   const navigate = useNavigate()
-
   const onClickNavigate = (query: string, lat: number, lon: number) => {
     setSearch({
       value: query,
@@ -80,22 +70,26 @@ const InitialSuggestion = ({
     })
   }
 
-  const getUserLocation = () => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const { latitude, longitude } = position.coords
-          onClickNavigate('Nearby', latitude, longitude)
-        },
-
-        (error) => {
-          console.error('Error get user location: ', error)
-        },
-      )
-    } else {
-      console.log('Geolocation is not supported by this browser')
-    }
+  const getLocation = (): Promise<GeolocationPosition> => {
+    return new Promise((resolve, reject) => {
+      if (!navigator.geolocation) {
+        reject(new Error('Geolocation is not supported'))
+      }
+      navigator.geolocation.getCurrentPosition(resolve, reject)
+    })
   }
+
+  const getUserLocation = () => {
+    getLocation()
+      .then((position) => {
+        const { latitude, longitude } = position.coords
+        onClickNavigate('Nearby', latitude, longitude)
+      })
+      .catch((err) => {
+        console.error('Geolocation error:', err.message)
+      })
+  }
+
   return (
     <>
       {INITIAL_SUGGESTED_PLACES?.map((item) => (

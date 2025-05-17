@@ -13,16 +13,31 @@ import AuthDialog from '../auth/AuthDialog'
 import { useToggle } from '@/hooks/useToggle'
 import { Link } from '@tanstack/react-router'
 import LandingSearch from '@/features/listing/search/LandingSearch'
+import { useState } from 'react'
+
+export type SearchState = {
+  value: string
+  lat: number | undefined
+  lon: number | undefined
+}
+
+const INITIAL_SEARCH_STATE = {
+  value: '',
+  lat: undefined,
+  lon: undefined,
+}
 
 const Navbar = () => {
   const [authDialogOpen, toggleAuthDialog] = useToggle(false)
+
+  const [search, setSearch] = useState<SearchState>(INITIAL_SEARCH_STATE)
   return (
-    <nav className=" py-2 border-b-1">
+    <nav className=" py-2 border-b-1 sticky top-0 z-50 bg-white">
       <div className="flex items-center gap-4 justify-between text-lg app-container">
-        <Link to="/">
+        <Link to="/" onClick={() => setSearch(INITIAL_SEARCH_STATE)}>
           <AppLogo />
         </Link>
-        <LandingSearch />
+        <LandingSearch setSearch={setSearch} search={search} />
         <DropdownMenu>
           <DropdownMenuTrigger>
             <div className="border-2 border-zinc-300 hover:shadow-[0px_10px_19px_rgba(0,0,0,0.1)] transition-all py-2 px-4 rounded-full flex items-center gap-4 cursor-pointer">

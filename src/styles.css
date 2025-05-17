@@ -7,6 +7,7 @@
 
 body {
   @apply m-0;
+  @apply text-neutral-800;
   font-family:
     -apple-system, BlinkMacSystemFont, 'Rubik', 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
@@ -21,7 +22,11 @@ code {
 }
 
 .app-container {
-  @apply mx-auto w-full max-w-[1800px] p-4 lg:px-8;
+  @apply mx-auto w-full max-w-[1500px] p-4 lg:px-8;
+}
+
+.hstack {
+  @apply flex items-center;
 }
 
 :root {
