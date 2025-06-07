@@ -1,6 +1,6 @@
 import { AppLogo } from '../Logo'
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
-import { Menu as MenuIcon } from 'lucide-react'
+import { LogOutIcon, Menu as MenuIcon } from 'lucide-react'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,10 +10,11 @@ import {
 } from '@/components/ui/dropdown-menu'
 import NoAvatarSVG from '@/assets/user/no_avatar.svg'
 import AuthDialog from '../auth/AuthDialog'
-import { useToggle } from '@/hooks/useToggle'
 import { Link } from '@tanstack/react-router'
 import LandingSearch from '@/features/listing/search/LandingSearch'
 import { useState } from 'react'
+import type { AuthDialogState } from '../auth/auth'
+import { useAuth } from '@/hooks/useAuth'
 
 export type SearchState = {
   value: string
@@ -28,8 +29,11 @@ const INITIAL_SEARCH_STATE = {
 }
 
 const Navbar = () => {
-  const [authDialogOpen, toggleAuthDialog] = useToggle(false)
-
+  const { isAuthenticated, logout } = useAuth()
+  const [authDialogOpen, toggleAuthDialog] = useState<AuthDialogState>({
+    authType: 'login',
+    open: false,
+  })
   const [search, setSearch] = useState<SearchState>(INITIAL_SEARCH_STATE)
   return (
     <nav className=" py-2 border-b-1 sticky top-0 z-50 bg-white">
@@ -42,10 +46,12 @@ const Navbar = () => {
           <DropdownMenuTrigger>
             <div className="border-2 border-zinc-300 hover:shadow-[0px_10px_19px_rgba(0,0,0,0.1)] transition-all py-2 px-4 rounded-full flex items-center gap-4 cursor-pointer">
               <MenuIcon width={'1.2rem'} />
-              <Avatar className="w-[35px] h-[35px]">
-                <AvatarImage src={NoAvatarSVG} alt="@shadcn" />
-                <AvatarFallback>CN</AvatarFallback>
-              </Avatar>
+              {isAuthenticated && (
+                <Avatar className="w-[35px] h-[35px]">
+                  <AvatarImage src={NoAvatarSVG} alt="@shadcn" />
+                  <AvatarFallback>CN</AvatarFallback>
+                </Avatar>
+              )}
             </div>
           </DropdownMenuTrigger>
           <DropdownMenuContent
@@ -53,28 +59,55 @@ const Navbar = () => {
             onCloseAutoFocus={(e) => e.preventDefault()}
             className="px-0 min-w-[240px] "
           >
-            <DropdownMenuItem
-              className="font-semibold px-3 py-4 text-sm rounded-none"
-              onClick={toggleAuthDialog}
-            >
-              Sign Up
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              className="px-3 py-4 text-sm rounded-none"
-              onClick={toggleAuthDialog}
-            >
-              Login In
-            </DropdownMenuItem>
-            <DropdownMenuSeparator className="bg-zinc-300" />
-            <DropdownMenuItem className="px-3 py-4 text-sm rounded-none">
-              Register your shed
-            </DropdownMenuItem>
+            {!isAuthenticated && (
+              <>
+                <DropdownMenuItem
+                  className="font-semibold px-3 py-4 text-sm rounded-none"
+                  onClick={() =>
+                    toggleAuthDialog({ authType: 'signup', open: true })
+                  }
+                >
+                  Sign Up
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  className="px-3 py-4 text-sm rounded-none"
+                  onClick={() =>
+                    toggleAuthDialog({ authType: 'login', open: true })
+                  }
+                >
+                  Login In
+                </DropdownMenuItem>
+                <DropdownMenuSeparator className="bg-zinc-300" />
+              </>
+            )}
+            {isAuthenticated && (
+              <Link to="/shed-register">
+                <DropdownMenuItem className="px-3 py-4 text-sm rounded-none">
+                  Register your shed
+                </DropdownMenuItem>
+              </Link>
+            )}
             <DropdownMenuItem className="px-3 py-4 text-sm rounded-none">
               Help Center
             </DropdownMenuItem>
+
+            {isAuthenticated && (
+              <DropdownMenuItem
+                className="px-3 py-4 text-sm rounded-none text-theme hover:!text-theme"
+                onClick={logout}
+              >
+                Log out <LogOutIcon color="var(--color-theme)" />
+              </DropdownMenuItem>
+            )}
           </DropdownMenuContent>
         </DropdownMenu>
-        <AuthDialog open={authDialogOpen} onOpenChange={toggleAuthDialog} />
+        <AuthDialog
+          authDialogOpen={authDialogOpen}
+          toggleAuthDialog={toggleAuthDialog}
+          onOpenChange={(open) =>
+            toggleAuthDialog((prev) => ({ ...prev, open: open }))
+          }
+        />
       </div>
     </nav>
   )

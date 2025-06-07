@@ -16,6 +16,19 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+input,
+textarea {
+  border: 2px solid #ccc;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+input:focus,
+textarea:focus {
+  border-color: rgba(0, 0, 0, 0.4);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.4); /* creates a focus ring */
+}
+
 code {
   font-family:
     source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
