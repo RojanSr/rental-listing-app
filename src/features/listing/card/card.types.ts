@@ -10,5 +10,4 @@ export type ListingCardType = {
   rate: number
   longitude: number
   latitude: number
-  orientation?: 'vertical' | 'horizontal'
 }

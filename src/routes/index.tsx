@@ -15,7 +15,7 @@ function App() {
   return (
     <div>
       <div className="app-container">
-        <div className="mb-8 mt-2">
+        <div className="flex justify-center pb-3 mb-3 sticky top-[90px] bg-white z-10">
           <ListingFilter
             selectedCategory={selectedCategory}
             setSelectedCategory={setSelectedCategory}

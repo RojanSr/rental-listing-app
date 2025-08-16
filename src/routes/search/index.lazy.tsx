@@ -71,8 +71,31 @@ function RouteComponent() {
   }
 
   return (
-    <div key={query}>
+    <div key={query} className="app-container">
       <div className="flex gap-4 flex-col md:flex-row">
+        <div className="flex-1/12">
+          <p className="pb-4 text-lg sticky top-[90px] bg-white z-10">
+            Results for {query}
+          </p>
+          <AnimatePresence initial={false}>
+            <div className="grid grid-cols-[repeat(auto-fill,_minmax(230px,_1fr))] gap-4">
+              {TestListing.map((listing) => (
+                <motion.div
+                  key={listing.id}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.9 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <ListingCard
+                    {...listing}
+                    category={listing.category as Category} // TODO: Remove this in future. Type assertion used due to type issue from json
+                  />
+                </motion.div>
+              ))}
+            </div>
+          </AnimatePresence>
+        </div>
         <div className="flex-1 h-[30dvh] md:h-[90dvh] sticky top-[104px]">
           <div className="absolute z-10 bottom-0 ">
             <select
@@ -90,7 +113,12 @@ function RouteComponent() {
           <MapContainer
             center={[lat, lon]}
             zoom={15}
-            style={{ height: 'inherit', width: '100%', zIndex: 1 }}
+            className="rounded-3xl"
+            style={{
+              height: 'inherit',
+              width: '100%',
+              zIndex: 9,
+            }}
           >
             <TileLayer
               url={mapStyles[activeStyle as keyof typeof mapStyles].url}
@@ -120,29 +148,6 @@ function RouteComponent() {
               </Marker>
             ))}
           </MapContainer>
-        </div>
-        <div className="flex-1">
-          <AnimatePresence initial={false}>
-            {TestListing.map((listing) => (
-              <motion.div
-                key={listing.id}
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.9 }}
-                transition={{ duration: 0.2 }}
-                style={{
-                  marginBottom: 16,
-                  marginTop: 16,
-                }}
-              >
-                <ListingCard
-                  {...listing}
-                  category={listing.category as Category} // TODO: Remove this in future. Type assertion used due to type issue from json
-                  orientation="horizontal"
-                />
-              </motion.div>
-            ))}
-          </AnimatePresence>
         </div>
       </div>
     </div>
