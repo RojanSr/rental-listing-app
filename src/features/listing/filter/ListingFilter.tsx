@@ -28,21 +28,15 @@ const ListingFilter = ({
         value={selectedCategory}
         onValueChange={(value) => setSelectedCategory(value as FilterType)}
       >
-        <TabsList
-          className="bg-transparent p-0 gap-8"
-          style={{
-            boxShadow: 'none !important',
-          }}
-        >
+        <TabsList>
           {(CONST_FILTER_CATEGORIES as FilterType[]).map((category) => (
             <TabsTrigger
               key={category}
               value={category}
               className={cn(
-                'relative !shadow-none rounded-none capitalize cursor-pointer flex flex-col h-fit text-theme after:content-[""] after:w-12 after:h-[2px] after:bg-theme after:absolute after:-bottom-1',
+                'flex items-center gap-3 capitalize cursor-pointer text-neutral-800 px-6 transition-none',
                 {
-                  'after:hidden text-neutral-500 hover:after:block hover:text-theme/70 hover:after:bg-theme/70':
-                    selectedCategory !== category,
+                  '!bg-theme text-neutral-300': selectedCategory === category,
                 },
               )}
             >

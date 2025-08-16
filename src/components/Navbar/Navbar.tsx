@@ -36,12 +36,14 @@ const Navbar = () => {
   })
   const [search, setSearch] = useState<SearchState>(INITIAL_SEARCH_STATE)
   return (
-    <nav className=" py-2 border-b-1 sticky top-0 z-50 bg-white">
-      <div className="flex items-center gap-4 justify-between text-lg app-container">
+    <nav className=" py-2 sticky top-0 z-50 bg-white">
+      <div className="flex items-center gap-4 justify-between relative text-lg app-container">
         <Link to="/" onClick={() => setSearch(INITIAL_SEARCH_STATE)}>
           <AppLogo />
         </Link>
-        <LandingSearch setSearch={setSearch} search={search} />
+        <div className="absolute right-1/2 translate-x-[50%]">
+          <LandingSearch setSearch={setSearch} search={search} />
+        </div>
         <DropdownMenu>
           <DropdownMenuTrigger>
             <div className="border-2 border-zinc-300 hover:shadow-[0px_10px_19px_rgba(0,0,0,0.1)] transition-all py-2 px-4 rounded-full flex items-center gap-4 cursor-pointer">

@@ -66,7 +66,7 @@ const Listing = ({ selectedCategory }: { selectedCategory: FilterType }) => {
   }
 
   return (
-    <div className="grid grid-cols-[repeat(auto-fill,_minmax(280px,_1fr))] gap-x-4 gap-y-10">
+    <div className="grid grid-cols-[repeat(auto-fill,_minmax(235px,_1fr))] gap-x-4 gap-y-10">
       {false ? <ListingSkeleton /> : <ShowListing listCards={listCards} />}
     </div>
   )

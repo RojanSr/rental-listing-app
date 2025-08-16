@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Playpen+Sans+Deva:wght@100..800&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
 @import 'tailwindcss';
 
 @plugin "tailwindcss-animate";
@@ -35,7 +35,7 @@ code {
 }
 
 .app-container {
-  @apply mx-auto w-full max-w-[1500px] p-4 lg:px-8;
+  @apply mx-auto w-full max-w-[1800px] p-4 lg:px-8;
 }
 
 .hstack {
