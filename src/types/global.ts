@@ -11,3 +11,5 @@ export type GlobalResponse<T> = {
   message: string
   data: T
 }
+
+export type DivClassName = React.HTMLAttributes<HTMLDivElement>['className']
