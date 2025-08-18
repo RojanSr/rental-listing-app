@@ -1,7 +1,7 @@
 // NotFound.tsx
 import { Link } from '@tanstack/react-router'
 
-export default function NotFound() {
+export const NotFound = () => {
   return (
     <div className="flex flex-col items-center justify-center h-[70vh] text-center p-6">
       <h1 className="text-4xl font-bold mb-4">404 - Not Found</h1>

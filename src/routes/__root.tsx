@@ -3,8 +3,8 @@ import { Outlet, createRootRouteWithContext } from '@tanstack/react-router'
 import type { QueryClient } from '@tanstack/react-query'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
-import NotFound from '@/components/feedback/NotFound'
 import { Toaster } from '@/components/ui/sonner'
+import { NotFound } from '@/components/feedback'
 
 interface MyRouterContext {
   queryClient: QueryClient

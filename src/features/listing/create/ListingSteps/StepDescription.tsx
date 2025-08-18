@@ -31,8 +31,8 @@ export const StepDescription = () => {
           {...register('shortDescription', {
             required: 'Title is required',
             minLength: {
-              value: 8,
-              message: 'Title must be at least 8 characters',
+              value: 20,
+              message: 'Title must be at least 20 characters',
             },
             maxLength: {
               value: 64,
