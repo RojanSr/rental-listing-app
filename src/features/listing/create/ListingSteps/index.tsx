@@ -36,9 +36,7 @@ const ListingSteps = () => {
     defaultValues,
     mode: 'onChange',
   })
-  const { handleSubmit, watch } = methods
-
-  console.log(watch())
+  const { handleSubmit } = methods
 
   const Step = steps[currentStep]
 
@@ -53,7 +51,6 @@ const ListingSteps = () => {
   const { mutate: addProperty } = useAddProperty()
 
   const onSubmit = (values: ListingFormValues) => {
-    if (currentStep < steps.length - 1) return
     const formData = new FormData()
 
     // append scalar fields
@@ -71,8 +68,6 @@ const ListingSteps = () => {
     values.images.forEach((file) => {
       formData.append('rentalImages', file)
     })
-
-    console.log(formData, 'formData')
 
     addProperty(formData)
   }
@@ -105,22 +100,20 @@ const ListingSteps = () => {
             Back
           </Button>
 
-          {currentStep < steps.length - 1 ? (
-            <Button
-              onClick={nextStep}
-              className="font-normal cursor-pointer px-8 text-md"
-              type="button"
-            >
-              Next
-            </Button>
-          ) : (
-            <Button
-              type="submit"
-              className="font-normal cursor-pointer px-8 text-md"
-            >
-              Submit
-            </Button>
-          )}
+          <Button
+            onClick={nextStep}
+            type="button"
+            className={`font-normal cursor-pointer px-8 text-md ${currentStep === steps.length - 1 ? 'hidden' : ''}`}
+          >
+            Next
+          </Button>
+
+          <Button
+            type="submit"
+            className={`font-normal cursor-pointer px-8 text-md ${currentStep < steps.length - 1 ? 'hidden' : ''}`}
+          >
+            Submit
+          </Button>
         </div>
       </form>
     </FormProvider>
