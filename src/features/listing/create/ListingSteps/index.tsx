@@ -53,6 +53,7 @@ const ListingSteps = () => {
   const { mutate: addProperty } = useAddProperty()
 
   const onSubmit = (values: ListingFormValues) => {
+    if (currentStep < steps.length - 1) return
     const formData = new FormData()
 
     // append scalar fields
@@ -98,7 +99,7 @@ const ListingSteps = () => {
           <Button
             onClick={prevStep}
             disabled={currentStep === 0}
-            className="font-normal text-md bg-transparent text-black underline shadow-none"
+            className="font-normal text-md cursor-pointer bg-transparent text-black underline shadow-none hover:bg-transparent"
             type="button"
           >
             Back
@@ -106,19 +107,17 @@ const ListingSteps = () => {
 
           {currentStep < steps.length - 1 ? (
             <Button
-              // onClick={async () => {
-              //   // optional per-step validation: trigger validations for each step's fields
-              //   const ok = await methods.trigger() // triggers all validations (or pass field names)
-              //   if (ok) setCurrentStep((s) => Math.min(steps.length - 1, s + 1))
-              // }}
               onClick={nextStep}
-              className="font-normal px-8 text-md"
+              className="font-normal cursor-pointer px-8 text-md"
               type="button"
             >
               Next
             </Button>
           ) : (
-            <Button type="submit" className="font-normal px-8 text-md">
+            <Button
+              type="submit"
+              className="font-normal cursor-pointer px-8 text-md"
+            >
               Submit
             </Button>
           )}
