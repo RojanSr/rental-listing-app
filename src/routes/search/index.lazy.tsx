@@ -64,9 +64,10 @@ function RouteComponent() {
   const { query, lat, lon } = Route.useSearch()
   const navigate = useNavigate()
 
-  const [center, setCenter] = useState<CoordinateType>({
+  const [center, setCenter] = useState<CoordinateType & { location: string }>({
     lat: lat || 0,
     lon: lon || 0,
+    location: '',
   })
   const [activeStyle, setActiveStyle] = useState<string>('googleStreets')
 
@@ -79,11 +80,20 @@ function RouteComponent() {
     latitude,
     longitude,
     id,
-  }: Pick<ListingCardType, 'latitude' | 'longitude' | 'id'>) => {
+    roomCategory,
+    address,
+  }: Pick<
+    ListingCardType,
+    'latitude' | 'longitude' | 'id' | 'roomCategory' | 'address'
+  >) => {
     if (latitude === center.lat && longitude === center.lon) {
       navigate({ to: '/post/$postId', params: { postId: id } })
     } else {
-      setCenter({ lat: latitude, lon: longitude })
+      setCenter({
+        lat: latitude,
+        lon: longitude,
+        location: `${roomCategory} in ${address}`,
+      })
     }
   }
 
@@ -121,6 +131,8 @@ function RouteComponent() {
                         id: listing.id,
                         latitude: listing.latitude,
                         longitude: listing.longitude,
+                        address: listing.address,
+                        roomCategory: listing.roomCategory,
                       })
                     }
                   >
@@ -184,7 +196,15 @@ function RouteComponent() {
                 </Popup>
               </Marker>
             ))}
-            <RecenterMap lat={center.lat} lon={center.lon} />
+            <RecenterMap
+              lat={center.lat}
+              lon={center.lon}
+              popupContent={
+                center.location
+                  ? `<strong style="text-transform:capitalize">${center.location}</strong>`
+                  : ''
+              }
+            />
           </MapContainer>
         </div>
       </div>
