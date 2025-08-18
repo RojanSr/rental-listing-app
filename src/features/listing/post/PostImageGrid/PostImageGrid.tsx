@@ -15,30 +15,11 @@ export const PostImageGrid = ({ data, className }: PostCommonProps) => {
           className="w-full h-full object-cover"
         />
       </div>
-      <div className="aspect-square">
-        <img
-          src={data.photos[0].photo}
-          className="w-full h-full object-cover"
-        />
-      </div>
-      <div className="aspect-square">
-        <img
-          src={data.photos[0].photo}
-          className="w-full h-full object-cover"
-        />
-      </div>
-      <div className="aspect-square">
-        <img
-          src={data.photos[0].photo}
-          className="w-full h-full object-cover"
-        />
-      </div>
-      <div className="aspect-square">
-        <img
-          src={data.photos[0].photo}
-          className="w-full h-full object-cover"
-        />
-      </div>
+      {data.photos.slice(1).map((phto) => (
+        <div className="aspect-square" key={phto.id}>
+          <img src={phto.photo} className="w-full h-full object-cover" />
+        </div>
+      ))}
     </div>
   )
 }
