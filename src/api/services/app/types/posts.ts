@@ -1,4 +1,4 @@
-import type { Category } from '@/types/global'
+import type { Category } from '@/types'
 
 export type CreatePropertyPayload = {
   roomCategory: Category

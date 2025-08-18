@@ -5,8 +5,7 @@ import 'leaflet/dist/leaflet.css'
 import { useState } from 'react'
 import ListingCard from '@/features/listing/card/ListingCard'
 import { AnimatePresence, motion } from 'framer-motion'
-import TestListing from '@/features/listing/listing.json'
-import type { Category } from '@/types/global'
+import { useFetchNearestProperties } from '@/api/services/app/posts/queries'
 
 // Fix default icon issue
 delete (L.Icon.Default.prototype as any)._getIconUrl
@@ -62,6 +61,11 @@ function RouteComponent() {
   const { query, lat, lon } = Route.useSearch()
   const [activeStyle, setActiveStyle] = useState<string>('googleStreets')
 
+  const { data, isLoading } = useFetchNearestProperties({
+    userLat: lat,
+    userLong: lon,
+  })
+
   if (!lat || !lon) {
     return (
       <p className="text-center font-semibold text-2xl">
@@ -70,16 +74,28 @@ function RouteComponent() {
     )
   }
 
+  if (!data?.length) {
+    return (
+      <p className="text-center font-semibold text-2xl">
+        Couldn't find listing around given location
+      </p>
+    )
+  }
+
+  if (isLoading) {
+    return <p className="text-center font-semibold text-2xl">Fetching</p>
+  }
+
   return (
     <div key={query} className="app-container">
       <div className="flex gap-4 flex-col md:flex-row">
         <div className="flex-1/12">
-          <p className="pb-4 text-lg sticky top-[90px] bg-white z-10">
+          <p className="pb-4 text-lg sticky top-[95px] bg-white z-10">
             Results for {query}
           </p>
           <AnimatePresence initial={false}>
             <div className="grid grid-cols-[repeat(auto-fill,_minmax(230px,_1fr))] gap-4">
-              {TestListing.map((listing) => (
+              {data.map((listing) => (
                 <motion.div
                   key={listing.id}
                   initial={{ opacity: 0, scale: 0.9 }}
@@ -87,21 +103,18 @@ function RouteComponent() {
                   exit={{ opacity: 0, scale: 0.9 }}
                   transition={{ duration: 0.2 }}
                 >
-                  <ListingCard
-                    {...listing}
-                    category={listing.category as Category} // TODO: Remove this in future. Type assertion used due to type issue from json
-                  />
+                  <ListingCard {...listing} />
                 </motion.div>
               ))}
             </div>
           </AnimatePresence>
         </div>
-        <div className="flex-1 h-[30dvh] md:h-[90dvh] sticky top-[104px]">
+        <div className="flex-1 h-[30dvh] md:h-[88vh] sticky top-[104px]">
           <div className="absolute z-10 bottom-0 ">
             <select
               value={activeStyle}
               onChange={(e) => setActiveStyle(e.target.value)}
-              className="px-4 py-2 text-sm border bg-white"
+              className="m-2 p-2 text-sm border bg-white"
             >
               {Object.entries(mapStyles).map(([key, style]) => (
                 <option key={key} value={key}>
@@ -126,7 +139,7 @@ function RouteComponent() {
                 mapStyles[activeStyle as keyof typeof mapStyles].attribution
               }
             />
-            {TestListing.map((listing) => (
+            {data.map((listing) => (
               <Marker
                 key={listing.id}
                 position={[listing.latitude, listing.longitude]}
@@ -139,7 +152,7 @@ function RouteComponent() {
                     target="_blank"
                   >
                     <div>
-                      <strong>{listing.title}</strong>
+                      <strong>{listing.shortDescription}</strong>
                       <br />
                       Location: {lat}, {lon}
                     </div>

@@ -6,7 +6,7 @@ const API_LIST = {
   property: {
     create: 'api/rental-properties/new',
     update: 'api/rental-properties/:id',
-    category: 'api/rental-properties',
+    all: 'api/rental-properties',
     nearest: 'api/rental-properties/nearest',
   },
 }

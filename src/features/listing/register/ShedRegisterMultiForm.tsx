@@ -7,8 +7,8 @@ import PropertyTypeStep from './multistep/PropertyTypeStep'
 import PropertyInfoStep from './multistep/PropertyInfoStep'
 import AdditionalInfoStep from './multistep/AdditionalInfoStep'
 import type { RegisterFormData } from './multistep/types'
-import { useAddProperty } from '@/api/services/app/mutations'
 import { useNavigate } from '@tanstack/react-router'
+import { useAddProperty } from '@/api/services/app/posts/mutation'
 
 const ShedRegisterMultiForm = () => {
   const navigate = useNavigate()
