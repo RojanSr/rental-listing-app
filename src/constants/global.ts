@@ -6,3 +6,10 @@ export const CONST_CATEGORIES: Category[] = [
   'apartment',
   'house',
 ]
+
+export const CATEGORY_TO_NEPALI: Record<Category, string> = {
+  room: 'कोठा',
+  apartment: 'अपार्टमेन्ट',
+  flat: 'तला',
+  house: 'घर',
+}

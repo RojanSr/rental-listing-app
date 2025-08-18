@@ -6,6 +6,7 @@ import { useState } from 'react'
 import ListingCard from '@/features/listing/card/ListingCard'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useFetchNearestProperties } from '@/api/services/app/posts/queries'
+import { cn } from '@/lib/utils'
 
 // Fix default icon issue
 delete (L.Icon.Default.prototype as any)._getIconUrl
@@ -74,14 +75,6 @@ function RouteComponent() {
     )
   }
 
-  if (!data?.length) {
-    return (
-      <p className="text-center font-semibold text-2xl">
-        Couldn't find listing around given location
-      </p>
-    )
-  }
-
   if (isLoading) {
     return <p className="text-center font-semibold text-2xl">Fetching</p>
   }
@@ -89,27 +82,37 @@ function RouteComponent() {
   return (
     <div key={query} className="app-container">
       <div className="flex gap-4 flex-col md:flex-row">
-        <div className="flex-1/12">
+        <div className={data ? 'flex-1/12' : 'flex-1'}>
           <p className="pb-4 text-lg sticky top-[95px] bg-white z-10">
             Results for {query}
           </p>
           <AnimatePresence initial={false}>
-            <div className="grid grid-cols-[repeat(auto-fill,_minmax(230px,_1fr))] gap-4">
-              {data.map((listing) => (
-                <motion.div
-                  key={listing.id}
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.9 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <ListingCard {...listing} />
-                </motion.div>
-              ))}
-            </div>
+            {data ? (
+              <div className="grid grid-cols-[repeat(auto-fill,_minmax(230px,_1fr))] gap-4">
+                {data.map((listing) => (
+                  <motion.div
+                    key={listing.id}
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.9 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <ListingCard {...listing} />
+                  </motion.div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-center font-semibold text-2xl whitespace-nowrap mt-6">
+                No listing around given location
+              </p>
+            )}
           </AnimatePresence>
         </div>
-        <div className="flex-1 h-[30dvh] md:h-[88vh] sticky top-[104px]">
+        <div
+          className={cn('flex-1 h-[30dvh] md:h-[88vh] sticky top-[104px]', {
+            'flex-2/6': !data,
+          })}
+        >
           <div className="absolute z-10 bottom-0 ">
             <select
               value={activeStyle}
@@ -126,12 +129,8 @@ function RouteComponent() {
           <MapContainer
             center={[lat, lon]}
             zoom={15}
-            className="rounded-3xl"
-            style={{
-              height: 'inherit',
-              width: '100%',
-              zIndex: 9,
-            }}
+            // className="rounded-3xl"
+            className="rounded-3xl h-full w-full"
           >
             <TileLayer
               url={mapStyles[activeStyle as keyof typeof mapStyles].url}
@@ -139,7 +138,7 @@ function RouteComponent() {
                 mapStyles[activeStyle as keyof typeof mapStyles].attribution
               }
             />
-            {data.map((listing) => (
+            {data?.map((listing) => (
               <Marker
                 key={listing.id}
                 position={[listing.latitude, listing.longitude]}

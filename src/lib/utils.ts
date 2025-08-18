@@ -13,3 +13,11 @@ export function deleteProp<T extends object, K extends keyof T>(
   const { [key]: _, ...rest } = obj
   return rest
 }
+
+export const copyToClipboard = async (text: string) => {
+  try {
+    await navigator.clipboard.writeText(text)
+  } catch (err) {
+    console.error('Failed to copy text:', err)
+  }
+}

@@ -20,7 +20,7 @@ const SelectUserTypeCard = ({
 }: SelectUserTypeCardProps) => {
   return (
     <button
-      autoFocus={false}
+      tabIndex={-1}
       className={cn(
         'w-32 h-32 bg-neutral-100 border-4 border-neutral-300 rounded-3xl flex justify-center relative transition-all duration-300 cursor-pointer',
         { 'border-red-400 bg-red-400/5': selectedUserType === userType },

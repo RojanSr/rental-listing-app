@@ -1,6 +1,6 @@
 import type { Category } from '@/types'
 
-interface PhotoType {
+export type PhotoType = {
   id: string
   photo: string
 }
