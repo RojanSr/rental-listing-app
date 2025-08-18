@@ -1,4 +1,4 @@
-import type { Category } from '@/types/global'
+import type { Category } from '@/types'
 
 export const CONST_CATEGORIES: Category[] = [
   'room',

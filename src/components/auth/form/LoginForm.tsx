@@ -2,7 +2,7 @@ import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import type { LoginFormData } from './type'
-import { useInitLogin } from '@/api/services/app/mutations'
+import { useInitLogin } from '@/api/services/app/auth/mutations'
 import { useNavigate } from '@tanstack/react-router'
 
 // Yup schema

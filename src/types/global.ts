@@ -1,6 +1,6 @@
 export type Category = 'room' | 'flat' | 'apartment' | 'house'
 
-export type Coordinates = {
+export type CoordinateType = {
   lat: number
   lon: number
 }

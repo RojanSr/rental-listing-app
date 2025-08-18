@@ -1,9 +1,5 @@
 import { create } from 'zustand'
-
-type CoordinateType = {
-  lat: number
-  lon: number
-}
+import type { CoordinateType } from '@/types'
 
 export type DocumentStoreType = {
   coordinates: CoordinateType | undefined

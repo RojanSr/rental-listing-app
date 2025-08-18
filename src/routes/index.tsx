@@ -1,8 +1,8 @@
 import Listing from '@/features/listing'
 import ListingFilter from '@/features/listing/filter/ListingFilter'
-import type { Category } from '@/types/global'
 import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
+import type { Category } from '@/types'
 
 export type FilterType = Category | 'all'
 

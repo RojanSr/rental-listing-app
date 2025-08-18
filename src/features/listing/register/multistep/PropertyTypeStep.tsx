@@ -1,7 +1,7 @@
 import { Label } from '@/components/ui/label'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import type { ShedRegisterCommonProps } from './types'
-import type { Category } from '@/types/global'
+import type { Category } from '@/types'
 import { CONST_CATEGORIES } from '@/constants'
 
 const PropertyTypeStep = ({

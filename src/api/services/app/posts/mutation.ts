@@ -1,0 +1,31 @@
+import API_LIST from '@/api/api_list'
+import { httpClient } from '@/api/clients/http-client'
+import { failToast, successToast } from '@/lib/toaster'
+import type { GlobalResponse } from '@/types'
+import { useMutation } from '@tanstack/react-query'
+import type { AxiosError } from 'axios'
+
+const addProperty = async (payload: FormData) => {
+  try {
+    await httpClient.post(API_LIST.property.create, payload)
+    successToast({
+      title: 'Property added',
+      description: "Congratulations, You're property has been added",
+    })
+  } catch (err) {
+    const error = err as AxiosError<GlobalResponse<null>, unknown>
+    failToast({
+      title: 'Error Occured',
+      description: error.response?.data?.message || 'Something went wrong',
+    })
+    throw error
+  }
+}
+
+const useAddProperty = () => {
+  return useMutation({
+    mutationFn: addProperty,
+  })
+}
+
+export { useAddProperty }

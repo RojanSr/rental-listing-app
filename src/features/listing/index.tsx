@@ -1,10 +1,10 @@
-import TestListing from './listing.json'
 import ListingCard from './card/ListingCard'
-import type { Category } from '@/types/global'
 import { Skeleton } from '@/components/ui/skeleton'
 import type { FilterType } from '@/routes'
 import { AnimatePresence, motion } from 'framer-motion'
 import EmptySvg from '@/assets/empty.svg'
+import type { ListingCardType } from '@/types'
+import { useFetchProperties } from '@/api/services/app/posts/queries'
 
 const ListingSkeleton = () => {
   return Array.from({ length: 10 }).map((_, i) => (
@@ -17,19 +17,7 @@ const ListingSkeleton = () => {
   ))
 }
 
-const ShowListing = ({
-  listCards,
-}: {
-  listCards: {
-    id: number
-    title: string
-    imgSrc: string
-    location: string
-    category: string
-    rate: number
-    bhk: number
-  }[]
-}) => {
+const ShowListing = ({ listCards }: { listCards: ListingCardType[] }) => {
   return (
     <AnimatePresence initial={false}>
       {listCards.map((listing) => (
@@ -40,10 +28,7 @@ const ShowListing = ({
           exit={{ opacity: 0, scale: 0.9 }}
           transition={{ duration: 0.2 }}
         >
-          <ListingCard
-            {...listing}
-            category={listing.category as Category} // TODO: Remove this in future. Type assertion used due to type issue from json
-          />
+          <ListingCard {...listing} />
         </motion.div>
       ))}
     </AnimatePresence>
@@ -51,12 +36,9 @@ const ShowListing = ({
 }
 
 const Listing = ({ selectedCategory }: { selectedCategory: FilterType }) => {
-  const listCards =
-    selectedCategory === 'all'
-      ? TestListing
-      : TestListing?.filter((item) => item.category === selectedCategory)
+  const { data, isLoading } = useFetchProperties({ category: selectedCategory })
 
-  if (!listCards?.length) {
+  if (!data?.length) {
     return (
       <div className="flex flex-col items-center justify-center text-neutral-600 mt-24 gap-2 select-none">
         <img src={EmptySvg} width={80} draggable={false} />
@@ -67,7 +49,7 @@ const Listing = ({ selectedCategory }: { selectedCategory: FilterType }) => {
 
   return (
     <div className="grid grid-cols-[repeat(auto-fill,_minmax(235px,_1fr))] gap-x-4 gap-y-10">
-      {false ? <ListingSkeleton /> : <ShowListing listCards={listCards} />}
+      {isLoading ? <ListingSkeleton /> : <ShowListing listCards={data} />}
     </div>
   )
 }
