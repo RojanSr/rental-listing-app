@@ -11,7 +11,7 @@ import { routeTree } from './routeTree.gen'
 import './styles.css'
 import 'leaflet/dist/leaflet.css'
 import reportWebVitals from './reportWebVitals.ts'
-import ErrorComponent from './components/feedback/ErrorComponent.tsx'
+import { ErrorComponent } from './components/feedback'
 
 // Create a new router instance
 const router = createRouter({

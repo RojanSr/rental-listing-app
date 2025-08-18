@@ -38,19 +38,13 @@ export const PostBody = ({ data }: PostCommonProps) => {
         </div>
       </div>
 
-      <div className="grid grid-cols-[fit-content(100%)_fit-content(100%)] gap-y-4 gap-x-4 w-fit py-8 border-y mt-8 border-y-neutral-300">
+      <div className="grid grid-cols-[fit-content(100%)_fit-content(100%)] gap-y-4 gap-x-4 py-8 border-y mt-8 border-y-neutral-300 w-full">
         <PhoneIcon size={26} />
         <p>+977 9838423487</p>
         <DropletIcon size={26} />
         <p>24/7</p>
         <NotepadTextDashedIcon size={26} />
-        <p>
-          Modern Studio in Central Kathmandu | Rooftop, Kitchenette & Self
-          Check-In Stay in a stylish, European-inspired studio in central
-          Kathmandu—ideal for solo travelers, couples, or business guests. Enjoy
-          a king-size bed, private bathroom, and a kitchenette with fridge,
-          microwave, spices, and cooking essentials.
-        </p>
+        <p>{data.description}</p>
       </div>
     </>
   )

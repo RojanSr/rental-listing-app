@@ -1,19 +1,14 @@
 import 'leaflet/dist/leaflet.css'
 import L from 'leaflet'
 import { useState } from 'react'
-import {
-  MapContainer,
-  Marker,
-  TileLayer,
-  useMap,
-  useMapEvent,
-} from 'react-leaflet'
+import { MapContainer, Marker, TileLayer, useMapEvent } from 'react-leaflet'
 import { Input } from '@/components/ui/input'
 import { useDebounce } from '@/hooks'
 import { useSearchLocations } from '@/api/services/geocoding/queries'
 import ListingAddressSuggestion from '../ListingAddressSuggestion/ListingAddressSuggestion'
 import { useFormContext, useWatch } from 'react-hook-form'
 import type { ListingFormValues } from '.'
+import { RecenterMap } from '@/lib/leaflet'
 
 // Fix default icon issue
 delete (L.Icon.Default.prototype as any)._getIconUrl
@@ -32,16 +27,6 @@ const ClickToAddMarker = () => {
     setValue('latitude', lat)
     setValue('longitude', lng)
   })
-
-  return null
-}
-
-const RecenterMap = ({ lat, lon }: { lat?: number; lon?: number }) => {
-  const map = useMap()
-
-  if (lat && lon) {
-    map.setView([lat, lon])
-  }
 
   return null
 }

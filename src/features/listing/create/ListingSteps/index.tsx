@@ -10,6 +10,7 @@ import { StepDescription } from './StepDescription'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useAddProperty } from '@/api/services/app/posts/mutation'
 import { FormProvider, useForm } from 'react-hook-form'
+import { SuccessModal } from '@/components/feedback'
 
 // form values: we store files in `images: File[]`
 export type ListingFormValues = Omit<ListingCardType, 'photos'> & {
@@ -31,14 +32,13 @@ const steps = [
 
 const ListingSteps = () => {
   const [currentStep, setCurrentStep] = useState(0)
+  const [open, setOpen] = useState(false)
 
   const methods = useForm<ListingFormValues>({
     defaultValues,
     mode: 'onChange',
   })
-  const { handleSubmit, watch } = methods
-
-  console.log(watch())
+  const { handleSubmit } = methods
 
   const Step = steps[currentStep]
 
@@ -50,10 +50,9 @@ const ListingSteps = () => {
     setCurrentStep((prev) => Math.max(prev - 1, 0))
   }
 
-  const { mutate: addProperty } = useAddProperty()
+  const { mutateAsync: addProperty } = useAddProperty()
 
-  const onSubmit = (values: ListingFormValues) => {
-    if (currentStep < steps.length - 1) return
+  const onSubmit = async (values: ListingFormValues) => {
     const formData = new FormData()
 
     // append scalar fields
@@ -72,58 +71,62 @@ const ListingSteps = () => {
       formData.append('rentalImages', file)
     })
 
-    console.log(formData, 'formData')
-
-    addProperty(formData)
+    await addProperty(formData)
+    setOpen(true)
   }
 
   return (
-    <FormProvider {...methods}>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="h-[70dvh] relative">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={currentStep}
-              initial={{ opacity: 0, y: 6 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -6 }}
-              transition={{ duration: 0.25 }}
-              className="absolute w-full h-full"
+    <>
+      <FormProvider {...methods}>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className="h-[70dvh] relative">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentStep}
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -6 }}
+                transition={{ duration: 0.25 }}
+                className="absolute w-full h-full"
+              >
+                <Step />
+              </motion.div>
+            </AnimatePresence>
+          </div>
+
+          <div className="flex justify-between items-center mx-12 mb-24">
+            <Button
+              onClick={prevStep}
+              disabled={currentStep === 0}
+              className="font-normal text-md cursor-pointer bg-transparent text-black underline shadow-none hover:bg-transparent"
+              type="button"
             >
-              <Step />
-            </motion.div>
-          </AnimatePresence>
-        </div>
+              Back
+            </Button>
 
-        <div className="flex justify-between items-center mx-12 mb-24">
-          <Button
-            onClick={prevStep}
-            disabled={currentStep === 0}
-            className="font-normal text-md cursor-pointer bg-transparent text-black underline shadow-none hover:bg-transparent"
-            type="button"
-          >
-            Back
-          </Button>
-
-          {currentStep < steps.length - 1 ? (
             <Button
               onClick={nextStep}
-              className="font-normal cursor-pointer px-8 text-md"
               type="button"
+              className={`font-normal cursor-pointer px-8 text-md ${currentStep === steps.length - 1 ? 'hidden' : ''}`}
             >
               Next
             </Button>
-          ) : (
+
             <Button
               type="submit"
-              className="font-normal cursor-pointer px-8 text-md"
+              className={`font-normal cursor-pointer px-8 text-md ${currentStep < steps.length - 1 ? 'hidden' : ''}`}
             >
               Submit
             </Button>
-          )}
-        </div>
-      </form>
-    </FormProvider>
+          </div>
+        </form>
+      </FormProvider>
+      <SuccessModal
+        open={open}
+        onClose={() => setOpen(false)}
+        message="Your property has been added successfully!"
+      />
+    </>
   )
 }
 

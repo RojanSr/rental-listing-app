@@ -2,7 +2,7 @@ type ErrorProps = {
   error: unknown
 }
 
-export default function ErrorComponent({ error }: ErrorProps) {
+export const ErrorComponent = ({ error }: ErrorProps) => {
   const errorMessage =
     error instanceof Error ? error.message : 'An unexpected error occurred.'
 

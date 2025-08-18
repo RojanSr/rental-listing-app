@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import EmptySvg from '@/assets/empty.svg'
 import type { ListingCardType } from '@/types'
 import { useFetchProperties } from '@/api/services/app/posts/queries'
+import { Link } from '@tanstack/react-router'
 
 const ListingSkeleton = () => {
   return Array.from({ length: 10 }).map((_, i) => (
@@ -28,7 +29,9 @@ const ShowListing = ({ listCards }: { listCards: ListingCardType[] }) => {
           exit={{ opacity: 0, scale: 0.9 }}
           transition={{ duration: 0.2 }}
         >
-          <ListingCard {...listing} />
+          <Link to="/post/$postId" params={{ postId: listing.id?.toString() }}>
+            <ListingCard {...listing} />
+          </Link>
         </motion.div>
       ))}
     </AnimatePresence>
