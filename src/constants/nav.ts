@@ -1,1 +1,1 @@
-export const SHOW_NAV_SEARCH_FOR_PATH = ['']
+export const SHOW_NAV_SEARCH_FOR_PATH = ['', 'search']

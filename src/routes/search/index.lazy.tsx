@@ -1,4 +1,4 @@
-import { createLazyFileRoute, Link } from '@tanstack/react-router'
+import { createLazyFileRoute, Link, useNavigate } from '@tanstack/react-router'
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
@@ -7,6 +7,8 @@ import ListingCard from '@/features/listing/card/ListingCard'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useFetchNearestProperties } from '@/api/services/app/posts/queries'
 import { cn } from '@/lib/utils'
+import type { CoordinateType, ListingCardType } from '@/types'
+import { RecenterMap } from '@/lib/leaflet'
 
 // Fix default icon issue
 delete (L.Icon.Default.prototype as any)._getIconUrl
@@ -60,12 +62,30 @@ export const Route = createLazyFileRoute('/search/')({
 
 function RouteComponent() {
   const { query, lat, lon } = Route.useSearch()
+  const navigate = useNavigate()
+
+  const [center, setCenter] = useState<CoordinateType>({
+    lat: lat || 0,
+    lon: lon || 0,
+  })
   const [activeStyle, setActiveStyle] = useState<string>('googleStreets')
 
   const { data, isLoading } = useFetchNearestProperties({
     userLat: lat,
     userLong: lon,
   })
+
+  const handlePropertyClick = ({
+    latitude,
+    longitude,
+    id,
+  }: Pick<ListingCardType, 'latitude' | 'longitude' | 'id'>) => {
+    if (latitude === center.lat && longitude === center.lon) {
+      navigate({ to: '/post/$postId', params: { postId: id } })
+    } else {
+      setCenter({ lat: latitude, lon: longitude })
+    }
+  }
 
   if (!lat || !lon) {
     return (
@@ -96,6 +116,13 @@ function RouteComponent() {
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.9 }}
                     transition={{ duration: 0.2 }}
+                    onClick={() =>
+                      handlePropertyClick({
+                        id: listing.id,
+                        latitude: listing.latitude,
+                        longitude: listing.longitude,
+                      })
+                    }
                   >
                     <ListingCard {...listing} />
                   </motion.div>
@@ -152,13 +179,12 @@ function RouteComponent() {
                   >
                     <div>
                       <strong>{listing.shortDescription}</strong>
-                      <br />
-                      Location: {lat}, {lon}
                     </div>
                   </Link>
                 </Popup>
               </Marker>
             ))}
+            <RecenterMap lat={center.lat} lon={center.lon} />
           </MapContainer>
         </div>
       </div>
