@@ -31,7 +31,7 @@ const LandingSearch = ({ search, setSearch }: LandingSearchProps) => {
       <div className="flex w-full justify-center items-center">
         <div className="relative">
           <Input
-            placeholder="Find homes in your dream location"
+            placeholder="Search desired location"
             className="outline-2 rounded-full p-6 w-3xs md:w-2xl text-sm md:text-[16px] placeholder:font-normal"
             onFocus={() => setIsFocused(true)}
             onBlur={() => {

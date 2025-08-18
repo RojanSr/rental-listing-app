@@ -10,11 +10,12 @@ import {
 } from '@/components/ui/dropdown-menu'
 import NoAvatarSVG from '@/assets/user/no_avatar.svg'
 import AuthDialog from '../auth/AuthDialog'
-import { Link } from '@tanstack/react-router'
+import { Link, useLocation } from '@tanstack/react-router'
 import LandingSearch from '@/features/listing/search/LandingSearch'
 import { useState } from 'react'
 import type { AuthDialogState } from '../auth/auth'
 import { useAuth } from '@/hooks/useAuth'
+import { useShowNavSearch } from '@/hooks'
 
 export type SearchState = {
   value: string
@@ -30,6 +31,8 @@ const INITIAL_SEARCH_STATE = {
 
 const Navbar = () => {
   const { isAuthenticated, logout } = useAuth()
+  const { pathname } = useLocation()
+  const { showNavSearch } = useShowNavSearch(pathname)
   const [authDialogOpen, toggleAuthDialog] = useState<AuthDialogState>({
     authType: 'login',
     open: false,
@@ -41,9 +44,11 @@ const Navbar = () => {
         <Link to="/" onClick={() => setSearch(INITIAL_SEARCH_STATE)}>
           <AppLogo />
         </Link>
-        <div className="absolute right-1/2 translate-x-[50%]">
-          <LandingSearch setSearch={setSearch} search={search} />
-        </div>
+        {showNavSearch && (
+          <div className="absolute right-1/2 translate-x-[50%]">
+            <LandingSearch setSearch={setSearch} search={search} />
+          </div>
+        )}
         <DropdownMenu>
           <DropdownMenuTrigger>
             <div className="border-2 border-zinc-300 hover:shadow-[0px_10px_19px_rgba(0,0,0,0.1)] transition-all py-2 px-4 rounded-full flex items-center gap-4 cursor-pointer">
@@ -83,7 +88,7 @@ const Navbar = () => {
               </>
             )}
             {isAuthenticated && (
-              <Link to="/shed-register">
+              <Link to="/add-listing">
                 <DropdownMenuItem className="px-3 py-4 text-sm rounded-none">
                   Register your shed
                 </DropdownMenuItem>

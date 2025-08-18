@@ -129,12 +129,8 @@ function RouteComponent() {
           <MapContainer
             center={[lat, lon]}
             zoom={15}
-            className="rounded-3xl"
-            style={{
-              height: 'inherit',
-              width: '100%',
-              zIndex: 9,
-            }}
+            // className="rounded-3xl"
+            className="rounded-3xl h-full w-full"
           >
             <TileLayer
               url={mapStyles[activeStyle as keyof typeof mapStyles].url}

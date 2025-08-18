@@ -19,6 +19,7 @@ import { Route as SearchIndexImport } from './routes/search/index'
 
 // Create Virtual Routes
 
+const AddListingIndexLazyImport = createFileRoute('/add-listing/')()
 const PostPostIdLazyImport = createFileRoute('/post/$postId')()
 
 // Create/Update Routes
@@ -28,6 +29,14 @@ const IndexRoute = IndexImport.update({
   path: '/',
   getParentRoute: () => rootRoute,
 } as any)
+
+const AddListingIndexLazyRoute = AddListingIndexLazyImport.update({
+  id: '/add-listing/',
+  path: '/add-listing/',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/add-listing/index.lazy').then((d) => d.Route),
+)
 
 const ShedRegisterIndexRoute = ShedRegisterIndexImport.update({
   id: '/shed-register/',
@@ -81,6 +90,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ShedRegisterIndexImport
       parentRoute: typeof rootRoute
     }
+    '/add-listing/': {
+      id: '/add-listing/'
+      path: '/add-listing'
+      fullPath: '/add-listing'
+      preLoaderRoute: typeof AddListingIndexLazyImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -91,6 +107,7 @@ export interface FileRoutesByFullPath {
   '/post/$postId': typeof PostPostIdLazyRoute
   '/search': typeof SearchIndexRoute
   '/shed-register': typeof ShedRegisterIndexRoute
+  '/add-listing': typeof AddListingIndexLazyRoute
 }
 
 export interface FileRoutesByTo {
@@ -98,6 +115,7 @@ export interface FileRoutesByTo {
   '/post/$postId': typeof PostPostIdLazyRoute
   '/search': typeof SearchIndexRoute
   '/shed-register': typeof ShedRegisterIndexRoute
+  '/add-listing': typeof AddListingIndexLazyRoute
 }
 
 export interface FileRoutesById {
@@ -106,14 +124,26 @@ export interface FileRoutesById {
   '/post/$postId': typeof PostPostIdLazyRoute
   '/search/': typeof SearchIndexRoute
   '/shed-register/': typeof ShedRegisterIndexRoute
+  '/add-listing/': typeof AddListingIndexLazyRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/post/$postId' | '/search' | '/shed-register'
+  fullPaths:
+    | '/'
+    | '/post/$postId'
+    | '/search'
+    | '/shed-register'
+    | '/add-listing'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/post/$postId' | '/search' | '/shed-register'
-  id: '__root__' | '/' | '/post/$postId' | '/search/' | '/shed-register/'
+  to: '/' | '/post/$postId' | '/search' | '/shed-register' | '/add-listing'
+  id:
+    | '__root__'
+    | '/'
+    | '/post/$postId'
+    | '/search/'
+    | '/shed-register/'
+    | '/add-listing/'
   fileRoutesById: FileRoutesById
 }
 
@@ -122,6 +152,7 @@ export interface RootRouteChildren {
   PostPostIdLazyRoute: typeof PostPostIdLazyRoute
   SearchIndexRoute: typeof SearchIndexRoute
   ShedRegisterIndexRoute: typeof ShedRegisterIndexRoute
+  AddListingIndexLazyRoute: typeof AddListingIndexLazyRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -129,6 +160,7 @@ const rootRouteChildren: RootRouteChildren = {
   PostPostIdLazyRoute: PostPostIdLazyRoute,
   SearchIndexRoute: SearchIndexRoute,
   ShedRegisterIndexRoute: ShedRegisterIndexRoute,
+  AddListingIndexLazyRoute: AddListingIndexLazyRoute,
 }
 
 export const routeTree = rootRoute
@@ -144,7 +176,8 @@ export const routeTree = rootRoute
         "/",
         "/post/$postId",
         "/search/",
-        "/shed-register/"
+        "/shed-register/",
+        "/add-listing/"
       ]
     },
     "/": {
@@ -158,6 +191,9 @@ export const routeTree = rootRoute
     },
     "/shed-register/": {
       "filePath": "shed-register/index.tsx"
+    },
+    "/add-listing/": {
+      "filePath": "add-listing/index.lazy.tsx"
     }
   }
 }

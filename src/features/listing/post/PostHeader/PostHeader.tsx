@@ -31,7 +31,7 @@ const SharePopover = () => {
 
 export const PostHeader = ({ data, className }: PostCommonProps) => {
   return (
-    <div className={cn('hstack justify-between', className)}>
+    <div className={cn('hstack justify-between gap-8', className)}>
       <p className="text-2xl font-medium">{data.shortDescription}</p>
       <div className="hstack gap-4 text-sm underline">
         <Popover>

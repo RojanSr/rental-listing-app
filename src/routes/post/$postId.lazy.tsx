@@ -13,11 +13,11 @@ function RouteComponent() {
   const { data, isLoading, isError } = useFetchPropertyById({ id: postId })
 
   if (isLoading) {
-    ;<>Loading...</>
+    return <p>Loading...</p>
   }
 
   if (!data || isError) {
-    return <>Failed to fetch data</>
+    return <p>Failed to fetch data</p>
   }
 
   return (
