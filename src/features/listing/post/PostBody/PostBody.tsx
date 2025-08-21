@@ -9,7 +9,12 @@ export const PostBody = ({ data }: PostCommonProps) => {
       <div className="mb-4 mt-3">
         <div className="flex justify-between">
           <div>
-            <p className="text-lg">{data.address}</p>
+            <a
+              href={`https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`}
+              target="_blank"
+            >
+              <p className="text-lg hover:underline">{data.address}</p>
+            </a>
             <div className="hstack gap-1 text-sm">
               <p className="capitalize">{data.roomCategory}</p>
               <p>•</p>

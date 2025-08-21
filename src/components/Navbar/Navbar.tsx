@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import NoAvatarSVG from '@/assets/user/no_avatar.svg'
 import AuthDialog from '../auth/AuthDialog'
-import { Link, useLocation } from '@tanstack/react-router'
+import { Link, useLocation, useRouter } from '@tanstack/react-router'
 import LandingSearch from '@/features/listing/search/LandingSearch'
 import { useState } from 'react'
 import type { AuthDialogState } from '../auth/auth'
@@ -32,6 +32,8 @@ const INITIAL_SEARCH_STATE = {
 const Navbar = () => {
   const { isAuthenticated, logout } = useAuth()
   const { pathname } = useLocation()
+  const { user } = useRouter().options.context
+  console.log(user)
   const { showNavSearch } = useShowNavSearch(pathname)
   const [authDialogOpen, toggleAuthDialog] = useState<AuthDialogState>({
     authType: 'login',
@@ -87,7 +89,7 @@ const Navbar = () => {
                 <DropdownMenuSeparator className="bg-zinc-300" />
               </>
             )}
-            {isAuthenticated && (
+            {isAuthenticated && user?.role === 1 && (
               <Link to="/add-listing">
                 <DropdownMenuItem className="px-3 py-4 text-sm rounded-none">
                   Register your shed

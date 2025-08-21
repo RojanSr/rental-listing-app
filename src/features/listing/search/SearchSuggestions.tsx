@@ -75,11 +75,7 @@ const InitialSuggestion = ({
       if (!navigator.geolocation) {
         reject(new Error('Geolocation is not supported'))
       }
-      navigator.geolocation.getCurrentPosition(resolve, reject, {
-        enableHighAccuracy: false,
-        timeout: 5000,
-        maximumAge: 60000,
-      })
+      navigator.geolocation.getCurrentPosition(resolve, reject)
     })
   }
 
