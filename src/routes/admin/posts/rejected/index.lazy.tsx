@@ -1,3 +1,5 @@
+import { PropertyStatus } from '@/enums/post'
+import { AdminPostList } from '@/features/admin/posts'
 import { createLazyFileRoute } from '@tanstack/react-router'
 
 export const Route = createLazyFileRoute('/admin/posts/rejected/')({
@@ -5,5 +7,12 @@ export const Route = createLazyFileRoute('/admin/posts/rejected/')({
 })
 
 function RouteComponent() {
-  return <></>
+  return (
+    <>
+      <p className="p-8 font-semibold text-lg text-neutral-700">
+        Approval Pending List
+      </p>
+      <AdminPostList propertyStatus={PropertyStatus.Rejected} />
+    </>
+  )
 }

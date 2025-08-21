@@ -2,7 +2,7 @@ import API_LIST from '@/api/api_list'
 import { httpClient } from '@/api/clients/http-client'
 import { failToast, successToast } from '@/lib/toaster'
 import type { GlobalResponse } from '@/types'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import type { AxiosError } from 'axios'
 
 const addProperty = async (payload: FormData) => {
@@ -28,4 +28,20 @@ const useAddProperty = () => {
   })
 }
 
-export { useAddProperty }
+const deleteProperty = async ({ postId }: { postId: string }) => {
+  await httpClient.delete(`${API_LIST.property.all}/${postId}`)
+}
+
+const useDeleteProperty = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: deleteProperty,
+    onSuccess: () =>
+      queryClient.invalidateQueries({
+        queryKey: [API_LIST.property.all],
+        exact: false,
+      }),
+  })
+}
+
+export { useAddProperty, useDeleteProperty }

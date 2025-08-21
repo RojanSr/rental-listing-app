@@ -13,6 +13,6 @@ export const LISTING_CARD_DEFAULT_VALUES: ListingCardType = {
   price: 0,
   priceUnitLabel: 'per flat',
   photos: [],
-  isApproved: false,
   propertyStatus: 1,
+  rejectionReason: '',
 }

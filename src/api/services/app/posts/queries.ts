@@ -3,7 +3,8 @@ import { httpClient } from '@/api/clients/http-client'
 import type { FilterType } from '@/routes'
 import type { GlobalResponse, ListingCardType } from '@/types'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import type { ReviewPayload } from '../types'
+import type { PropertyDetailByID, ReviewPayload } from '../types'
+import type { PropertyStatus } from '@/enums/post'
 
 const fetchApprovedProperties = async ({
   category,
@@ -55,7 +56,7 @@ const useFetchNearestProperties = ({
 }
 
 const fetchPropertyById = async ({ id }: { id: string }) => {
-  const response = await httpClient.get<GlobalResponse<ListingCardType>>(
+  const response = await httpClient.get<GlobalResponse<PropertyDetailByID>>(
     `${API_LIST.property.all}/${id}`,
   )
   return response
@@ -70,18 +71,26 @@ const useFetchPropertyById = ({ id }: { id: string }) => {
   })
 }
 
-const fetchAllProperties = async ({ category }: { category?: FilterType }) => {
+const fetchAllProperties = async ({
+  propertyStatus,
+}: {
+  propertyStatus: PropertyStatus
+}) => {
   const response = await httpClient.get<GlobalResponse<ListingCardType[]>>(
     API_LIST.property.all,
-    { params: category !== 'all' ? { category } : null },
+    { params: { propertyStatus } },
   )
   return response
 }
 
-const useFetchAllProperties = ({ category }: { category?: FilterType }) => {
+const useFetchAllProperties = ({
+  propertyStatus,
+}: {
+  propertyStatus: PropertyStatus
+}) => {
   return useQuery({
-    queryKey: [API_LIST.property.all, category],
-    queryFn: () => fetchAllProperties({ category }),
+    queryKey: [API_LIST.property.all, propertyStatus],
+    queryFn: () => fetchAllProperties({ propertyStatus }),
     select: (data) => data.data.data,
   })
 }

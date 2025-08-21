@@ -37,6 +37,9 @@ const AdminPostsApprovedIndexLazyImport = createFileRoute(
 const AdminPostsPendingPostIdLazyImport = createFileRoute(
   '/admin/posts/pending/$postId',
 )()
+const AdminPostsApprovedPostIdLazyImport = createFileRoute(
+  '/admin/posts/approved/$postId',
+)()
 
 // Create/Update Routes
 
@@ -125,6 +128,15 @@ const AdminPostsPendingPostIdLazyRoute =
     import('./routes/admin/posts/pending/$postId.lazy').then((d) => d.Route),
   )
 
+const AdminPostsApprovedPostIdLazyRoute =
+  AdminPostsApprovedPostIdLazyImport.update({
+    id: '/admin/posts/approved/$postId',
+    path: '/admin/posts/approved/$postId',
+    getParentRoute: () => rootRoute,
+  } as any).lazy(() =>
+    import('./routes/admin/posts/approved/$postId.lazy').then((d) => d.Route),
+  )
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -169,6 +181,13 @@ declare module '@tanstack/react-router' {
       path: '/shed-register'
       fullPath: '/shed-register'
       preLoaderRoute: typeof ShedRegisterIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/admin/posts/approved/$postId': {
+      id: '/admin/posts/approved/$postId'
+      path: '/admin/posts/approved/$postId'
+      fullPath: '/admin/posts/approved/$postId'
+      preLoaderRoute: typeof AdminPostsApprovedPostIdLazyImport
       parentRoute: typeof rootRoute
     }
     '/admin/posts/pending/$postId': {
@@ -218,6 +237,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminIndexRoute
   '/search': typeof SearchIndexRoute
   '/shed-register': typeof ShedRegisterIndexRoute
+  '/admin/posts/approved/$postId': typeof AdminPostsApprovedPostIdLazyRoute
   '/admin/posts/pending/$postId': typeof AdminPostsPendingPostIdLazyRoute
   '/admin/posts/approved': typeof AdminPostsApprovedIndexLazyRoute
   '/admin/posts/pending': typeof AdminPostsPendingIndexLazyRoute
@@ -232,6 +252,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminIndexRoute
   '/search': typeof SearchIndexRoute
   '/shed-register': typeof ShedRegisterIndexRoute
+  '/admin/posts/approved/$postId': typeof AdminPostsApprovedPostIdLazyRoute
   '/admin/posts/pending/$postId': typeof AdminPostsPendingPostIdLazyRoute
   '/admin/posts/approved': typeof AdminPostsApprovedIndexLazyRoute
   '/admin/posts/pending': typeof AdminPostsPendingIndexLazyRoute
@@ -247,6 +268,7 @@ export interface FileRoutesById {
   '/admin/': typeof AdminIndexRoute
   '/search/': typeof SearchIndexRoute
   '/shed-register/': typeof ShedRegisterIndexRoute
+  '/admin/posts/approved/$postId': typeof AdminPostsApprovedPostIdLazyRoute
   '/admin/posts/pending/$postId': typeof AdminPostsPendingPostIdLazyRoute
   '/admin/posts/approved/': typeof AdminPostsApprovedIndexLazyRoute
   '/admin/posts/pending/': typeof AdminPostsPendingIndexLazyRoute
@@ -263,6 +285,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/search'
     | '/shed-register'
+    | '/admin/posts/approved/$postId'
     | '/admin/posts/pending/$postId'
     | '/admin/posts/approved'
     | '/admin/posts/pending'
@@ -276,6 +299,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/search'
     | '/shed-register'
+    | '/admin/posts/approved/$postId'
     | '/admin/posts/pending/$postId'
     | '/admin/posts/approved'
     | '/admin/posts/pending'
@@ -289,6 +313,7 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/search/'
     | '/shed-register/'
+    | '/admin/posts/approved/$postId'
     | '/admin/posts/pending/$postId'
     | '/admin/posts/approved/'
     | '/admin/posts/pending/'
@@ -304,6 +329,7 @@ export interface RootRouteChildren {
   AdminIndexRoute: typeof AdminIndexRoute
   SearchIndexRoute: typeof SearchIndexRoute
   ShedRegisterIndexRoute: typeof ShedRegisterIndexRoute
+  AdminPostsApprovedPostIdLazyRoute: typeof AdminPostsApprovedPostIdLazyRoute
   AdminPostsPendingPostIdLazyRoute: typeof AdminPostsPendingPostIdLazyRoute
   AdminPostsApprovedIndexLazyRoute: typeof AdminPostsApprovedIndexLazyRoute
   AdminPostsPendingIndexLazyRoute: typeof AdminPostsPendingIndexLazyRoute
@@ -318,6 +344,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminIndexRoute: AdminIndexRoute,
   SearchIndexRoute: SearchIndexRoute,
   ShedRegisterIndexRoute: ShedRegisterIndexRoute,
+  AdminPostsApprovedPostIdLazyRoute: AdminPostsApprovedPostIdLazyRoute,
   AdminPostsPendingPostIdLazyRoute: AdminPostsPendingPostIdLazyRoute,
   AdminPostsApprovedIndexLazyRoute: AdminPostsApprovedIndexLazyRoute,
   AdminPostsPendingIndexLazyRoute: AdminPostsPendingIndexLazyRoute,
@@ -341,6 +368,7 @@ export const routeTree = rootRoute
         "/admin/",
         "/search/",
         "/shed-register/",
+        "/admin/posts/approved/$postId",
         "/admin/posts/pending/$postId",
         "/admin/posts/approved/",
         "/admin/posts/pending/",
@@ -365,6 +393,9 @@ export const routeTree = rootRoute
     },
     "/shed-register/": {
       "filePath": "shed-register/index.tsx"
+    },
+    "/admin/posts/approved/$postId": {
+      "filePath": "admin/posts/approved/$postId.lazy.tsx"
     },
     "/admin/posts/pending/$postId": {
       "filePath": "admin/posts/pending/$postId.lazy.tsx"

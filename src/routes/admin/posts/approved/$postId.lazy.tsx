@@ -3,7 +3,7 @@ import PostViewById from '@/features/listing/post/PostViewById'
 import { createLazyFileRoute, Link } from '@tanstack/react-router'
 import { ChevronLeftIcon } from 'lucide-react'
 
-export const Route = createLazyFileRoute('/admin/posts/pending/$postId')({
+export const Route = createLazyFileRoute('/admin/posts/approved/$postId')({
   component: RouteComponent,
 })
 
@@ -18,7 +18,7 @@ function RouteComponent() {
         </Link>
       </div>
       <PostViewById postId={postId} />
-      <AdminPostAction from={'pending'} postId={postId} />
+      <AdminPostAction from={'approved'} postId={postId} />
     </div>
   )
 }
