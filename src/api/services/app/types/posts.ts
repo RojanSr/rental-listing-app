@@ -1,3 +1,4 @@
+import type { PropertyStatus } from '@/enums/post'
 import type { Category } from '@/types'
 
 export type CreatePropertyPayload = {
@@ -10,4 +11,9 @@ export type CreatePropertyPayload = {
   latitude: number | null
   rentalImages: File[]
   price: number
+}
+
+export type ReviewPayload = {
+  propertyStatus: PropertyStatus
+  rejectionReason?: string
 }

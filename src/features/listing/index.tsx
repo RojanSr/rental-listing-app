@@ -1,11 +1,11 @@
 import ListingCard from './card/ListingCard'
 import { Skeleton } from '@/components/ui/skeleton'
-import type { FilterType } from '@/routes'
 import { AnimatePresence, motion } from 'framer-motion'
 import EmptySvg from '@/assets/empty.svg'
-import type { ListingCardType } from '@/types'
-import { useFetchProperties } from '@/api/services/app/posts/queries'
 import { Link } from '@tanstack/react-router'
+import { useFetchApprovedProperties } from '@/api/services/app/posts/queries'
+import type { FilterType } from '@/routes'
+import type { ListingCardType } from '@/types'
 
 const ListingSkeleton = () => {
   return Array.from({ length: 10 }).map((_, i) => (
@@ -39,7 +39,9 @@ const ShowListing = ({ listCards }: { listCards: ListingCardType[] }) => {
 }
 
 const Listing = ({ selectedCategory }: { selectedCategory: FilterType }) => {
-  const { data, isLoading } = useFetchProperties({ category: selectedCategory })
+  const { data, isLoading } = useFetchApprovedProperties({
+    category: selectedCategory,
+  })
 
   if (!data?.length) {
     return (

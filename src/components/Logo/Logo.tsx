@@ -1,6 +1,6 @@
 const Logo = () => {
   return (
-    <div className="flex items-end gap-3 text-theme">
+    <div className="flex items-end gap-3 text-theme w-fit">
       <p
         className={'select-none font-normal'}
         style={{

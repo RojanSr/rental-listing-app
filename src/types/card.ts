@@ -1,3 +1,4 @@
+import type { PropertyStatus } from '@/enums/post'
 import type { Category } from '@/types'
 
 export type PhotoType = {
@@ -19,4 +20,5 @@ export type ListingCardType = {
   priceUnitLabel: string
   photos: PhotoType[]
   isApproved: boolean
+  propertyStatus: PropertyStatus
 }

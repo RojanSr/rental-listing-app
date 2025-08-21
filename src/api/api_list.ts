@@ -6,8 +6,10 @@ const API_LIST = {
   property: {
     create: 'api/rental-properties/new',
     update: 'api/rental-properties/:id',
-    all: 'api/rental-properties-client',
+    approved: 'api/rental-properties-client',
+    all: 'api/rental-properties',
     nearest: 'api/rental-properties/nearest',
+    review: 'api/rental-properties-approval',
   },
 }
 

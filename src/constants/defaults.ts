@@ -14,4 +14,5 @@ export const LISTING_CARD_DEFAULT_VALUES: ListingCardType = {
   priceUnitLabel: 'per flat',
   photos: [],
   isApproved: false,
+  propertyStatus: 1,
 }
