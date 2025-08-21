@@ -11,6 +11,9 @@ const API_LIST = {
     nearest: 'api/rental-properties/nearest',
     review: 'api/rental-properties-approval',
   },
+  user: {
+    all: 'api/users',
+  },
 }
 
 export default API_LIST

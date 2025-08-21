@@ -11,6 +11,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { useAddProperty } from '@/api/services/app/posts/mutation'
 import { FormProvider, useForm } from 'react-hook-form'
 import { SuccessModal } from '@/components/feedback'
+import { useNavigate } from '@tanstack/react-router'
 
 // form values: we store files in `images: File[]`
 export type ListingFormValues = Omit<ListingCardType, 'photos'> & {
@@ -33,6 +34,8 @@ const steps = [
 const ListingSteps = () => {
   const [currentStep, setCurrentStep] = useState(0)
   const [open, setOpen] = useState(false)
+
+  const navigate = useNavigate()
 
   const methods = useForm<ListingFormValues>({
     defaultValues,
@@ -79,7 +82,7 @@ const ListingSteps = () => {
     <>
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="h-[70dvh] relative">
+          <div className="h-[70dvh] z-0 relative">
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentStep}
@@ -94,7 +97,7 @@ const ListingSteps = () => {
             </AnimatePresence>
           </div>
 
-          <div className="flex justify-between items-center mx-12 mb-24">
+          <div className="flex justify-between items-center mx-12 mb-24 relative z-10">
             <Button
               onClick={prevStep}
               disabled={currentStep === 0}
@@ -123,7 +126,10 @@ const ListingSteps = () => {
       </FormProvider>
       <SuccessModal
         open={open}
-        onClose={() => setOpen(false)}
+        onClose={() => {
+          navigate({ to: '/' })
+          setOpen(false)
+        }}
         message="Your property has been added successfully!"
       />
     </>

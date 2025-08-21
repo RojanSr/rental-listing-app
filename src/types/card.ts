@@ -19,6 +19,6 @@ export type ListingCardType = {
   price: number
   priceUnitLabel: string
   photos: PhotoType[]
-  isApproved: boolean
   propertyStatus: PropertyStatus
+  rejectionReason: string
 }

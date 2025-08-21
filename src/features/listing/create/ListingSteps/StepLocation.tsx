@@ -76,7 +76,7 @@ export const StepLocation = () => {
               value={address}
               onChange={(e) => {
                 const value = e.target.value
-                setValue('address', value.trim())
+                setValue('address', value)
               }}
               placeholder="Enter property address"
               required

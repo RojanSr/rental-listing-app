@@ -1,24 +1,34 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import NoAvatarSVG from '@/assets/user/no_avatar.svg'
 import type { PostCommonProps } from '../types'
-import { DropletIcon, NotepadTextDashedIcon, PhoneIcon } from 'lucide-react'
+import { MailIcon, NotepadTextDashedIcon, PhoneIcon } from 'lucide-react'
 
 export const PostBody = ({ data }: PostCommonProps) => {
+  const {
+    address,
+    numberOfRoom,
+    latitude,
+    longitude,
+    roomCategory,
+    price,
+    description,
+    user,
+  } = data
   return (
     <>
       <div className="mb-4 mt-3">
         <div className="flex justify-between">
           <div>
             <a
-              href={`https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`}
+              href={`https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}`}
               target="_blank"
             >
-              <p className="text-lg hover:underline">{data.address}</p>
+              <p className="text-lg hover:underline">{address}</p>
             </a>
             <div className="hstack gap-1 text-sm">
-              <p className="capitalize">{data.roomCategory}</p>
+              <p className="capitalize">{roomCategory}</p>
               <p>•</p>
-              <p>{data.numberOfRoom} bedroom</p>
+              <p>{numberOfRoom} bedroom</p>
               <p>•</p>
               <p>1 hall</p>
               <p>•</p>
@@ -26,7 +36,7 @@ export const PostBody = ({ data }: PostCommonProps) => {
             </div>
           </div>
           <p className="text-2xl font-medium">
-            Rs. {data.price}{' '}
+            Rs. {price}{' '}
             <span className="text-[16px] font-normal">per month</span>{' '}
           </p>
         </div>
@@ -38,18 +48,20 @@ export const PostBody = ({ data }: PostCommonProps) => {
           <AvatarFallback>CN</AvatarFallback>
         </Avatar>
         <div className="text-xs">
-          <p className="text-sm font-medium">Posted by John Doe</p>
+          <p className="text-sm font-medium">
+            Posted by <span className="capitalize">{user.fullName}</span>
+          </p>
           <p>8 days ago</p>
         </div>
       </div>
 
       <div className="grid grid-cols-[fit-content(100%)_fit-content(100%)] gap-y-4 gap-x-4 py-8 border-y mt-8 border-y-neutral-300 w-full">
-        <PhoneIcon size={26} />
-        <p>+977 9838423487</p>
-        <DropletIcon size={26} />
-        <p>24/7</p>
         <NotepadTextDashedIcon size={26} />
-        <p>{data.description}</p>
+        <p>{description}</p>
+        <PhoneIcon size={26} />
+        <p>+977 {user.contactNumber}</p>
+        <MailIcon size={26} />
+        <p>{user.email}</p>
       </div>
     </>
   )
