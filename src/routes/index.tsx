@@ -1,13 +1,19 @@
 import Listing from '@/features/listing'
 import ListingFilter from '@/features/listing/filter/ListingFilter'
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, redirect } from '@tanstack/react-router'
 import { useState } from 'react'
 import type { Category } from '@/types'
+import { UserEnum } from '@/enums/user'
 
 export type FilterType = Category | 'all'
 
 export const Route = createFileRoute('/')({
   component: App,
+  loader: ({ context: { user } }) => {
+    if (user?.role === UserEnum.SuperAdmin) {
+      throw redirect({ to: '/admin' })
+    }
+  },
 })
 
 function App() {

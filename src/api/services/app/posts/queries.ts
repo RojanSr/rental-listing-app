@@ -2,20 +2,25 @@ import API_LIST from '@/api/api_list'
 import { httpClient } from '@/api/clients/http-client'
 import type { FilterType } from '@/routes'
 import type { GlobalResponse, ListingCardType } from '@/types'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import type { ReviewPayload } from '../types'
 
-const fetchProperties = async ({ category }: { category: FilterType }) => {
+const fetchApprovedProperties = async ({
+  category,
+}: {
+  category: FilterType
+}) => {
   const response = await httpClient.get<GlobalResponse<ListingCardType[]>>(
-    API_LIST.property.all,
+    API_LIST.property.approved,
     { params: category !== 'all' ? { category } : null },
   )
   return response
 }
 
-const useFetchProperties = ({ category }: { category: FilterType }) => {
+const useFetchApprovedProperties = ({ category }: { category: FilterType }) => {
   return useQuery({
-    queryKey: [API_LIST.property.all, category],
-    queryFn: () => fetchProperties({ category }),
+    queryKey: [API_LIST.property.approved, category],
+    queryFn: () => fetchApprovedProperties({ category }),
     select: (data) => data.data.data,
   })
 }
@@ -61,7 +66,53 @@ const useFetchPropertyById = ({ id }: { id: string }) => {
     queryKey: [API_LIST.property.all, id],
     queryFn: () => fetchPropertyById({ id }),
     select: (data) => data.data.data,
+    enabled: !!id,
   })
 }
 
-export { useFetchProperties, useFetchNearestProperties, useFetchPropertyById }
+const fetchAllProperties = async ({ category }: { category?: FilterType }) => {
+  const response = await httpClient.get<GlobalResponse<ListingCardType[]>>(
+    API_LIST.property.all,
+    { params: category !== 'all' ? { category } : null },
+  )
+  return response
+}
+
+const useFetchAllProperties = ({ category }: { category?: FilterType }) => {
+  return useQuery({
+    queryKey: [API_LIST.property.all, category],
+    queryFn: () => fetchAllProperties({ category }),
+    select: (data) => data.data.data,
+  })
+}
+
+const reviewProperty = async ({
+  postId,
+  payload,
+}: {
+  postId: string
+  payload: ReviewPayload
+}) => {
+  if (!postId) return
+  await httpClient.put(`${API_LIST.property.review}/${postId}`, payload)
+}
+
+const useReviewProperty = ({ postId }: { postId: string }) => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: reviewProperty,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [API_LIST.property.all, postId],
+      })
+    },
+  })
+}
+
+export {
+  useFetchApprovedProperties,
+  useFetchNearestProperties,
+  useFetchPropertyById,
+  useFetchAllProperties,
+  useReviewProperty,
+}

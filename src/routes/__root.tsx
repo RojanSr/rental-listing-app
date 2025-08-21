@@ -1,4 +1,8 @@
-import { Outlet, createRootRouteWithContext } from '@tanstack/react-router'
+import {
+  Outlet,
+  createRootRouteWithContext,
+  useRouter,
+} from '@tanstack/react-router'
 
 import type { QueryClient } from '@tanstack/react-query'
 import Navbar from '@/components/Navbar'
@@ -6,6 +10,8 @@ import Footer from '@/components/Footer'
 import { Toaster } from '@/components/ui/sonner'
 import { NotFound } from '@/components/feedback'
 import type { JWTPayload } from '@/types/user'
+import { UserEnum } from '@/enums/user'
+import { AdminLayout } from '@/features/admin/layout'
 
 interface MyRouterContext {
   queryClient: QueryClient
@@ -13,15 +19,28 @@ interface MyRouterContext {
 }
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({
-  component: () => (
-    <div className="flex flex-col min-h-screen">
-      <Navbar />
-      <div className="grow">
-        <Outlet />
-      </div>
-      <Toaster />
-      <Footer />
-    </div>
-  ),
+  component: () => {
+    const { user } = useRouter().options.context
+    const isSuperAdmin = user?.role === UserEnum.SuperAdmin
+
+    return (
+      <>
+        {isSuperAdmin ? (
+          <AdminLayout>
+            <Outlet />
+          </AdminLayout>
+        ) : (
+          <div className="flex min-h-screen flex-col">
+            <Navbar />
+            <div className="grow">
+              <Outlet />
+            </div>
+            <Footer />
+          </div>
+        )}
+        <Toaster />
+      </>
+    )
+  },
   notFoundComponent: NotFound,
 })
