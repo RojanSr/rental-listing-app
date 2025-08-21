@@ -167,7 +167,7 @@ function RouteComponent() {
           </div>
           <MapContainer
             center={[lat, lon]}
-            zoom={15}
+            zoom={16}
             // className="rounded-3xl"
             className="rounded-3xl h-full w-full"
           >

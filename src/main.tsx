@@ -12,12 +12,16 @@ import './styles.css'
 import 'leaflet/dist/leaflet.css'
 import reportWebVitals from './reportWebVitals.ts'
 import { ErrorComponent } from './components/feedback'
+import { TokenService } from './lib/TokenService.ts'
+
+const user = TokenService.decodeToken()
 
 // Create a new router instance
 const router = createRouter({
   routeTree,
   context: {
     ...TanstackQuery.getContext(),
+    user, // const { user } = useRouter().options.context
   },
   defaultPreload: 'intent',
   scrollRestoration: true,

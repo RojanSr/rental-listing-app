@@ -1,6 +1,8 @@
 import Cookie from 'js-cookie'
 
 import { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY } from '@/constants'
+import { jwtDecode } from 'jwt-decode'
+import type { JWTPayload } from '@/types/user'
 
 const getToken = (
   token_name: typeof ACCESS_TOKEN_KEY | typeof REFRESH_TOKEN_KEY,
@@ -32,11 +34,22 @@ const checkAuth = () => {
   }
 }
 
+const decodeToken = (): JWTPayload | null => {
+  const token = getToken(ACCESS_TOKEN_KEY)
+  if (!token) return null
+  try {
+    return jwtDecode<JWTPayload>(token)
+  } catch {
+    return null
+  }
+}
+
 const TokenService = {
   getToken,
   setToken,
   checkAuth,
   logout,
+  decodeToken,
 }
 
 export { TokenService }
