@@ -12,19 +12,24 @@ import { NotFound } from '@/components/feedback'
 import type { JWTPayload } from '@/types/user'
 import { UserEnum } from '@/enums/user'
 import { AdminLayout } from '@/features/admin/layout'
+import { AnimatePresence } from 'framer-motion'
 
-interface MyRouterContext {
+export interface MyRouterContext {
   queryClient: QueryClient
   user: JWTPayload | null
 }
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({
   component: () => {
-    const { user } = useRouter().options.context
+    const {
+      options: {
+        context: { user },
+      },
+    } = useRouter()
     const isSuperAdmin = user?.role === UserEnum.SuperAdmin
 
     return (
-      <>
+      <AnimatePresence mode="wait">
         {isSuperAdmin ? (
           <AdminLayout>
             <Outlet />
@@ -39,7 +44,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
           </div>
         )}
         <Toaster />
-      </>
+      </AnimatePresence>
     )
   },
   notFoundComponent: NotFound,

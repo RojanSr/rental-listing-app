@@ -3,6 +3,7 @@ import { httpClient } from '@/api/clients/http-client'
 import type { GlobalResponse } from '@/types'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import type { UserListType } from '../types'
+import type { UserInfo } from '@/types/user'
 
 const fetchAllUsers = async () => {
   const response = await httpClient.get<GlobalResponse<UserListType[]>>(
@@ -16,6 +17,22 @@ const useFetchAllUsers = () => {
     queryKey: [API_LIST.user.all],
     queryFn: fetchAllUsers,
     select: (data) => data.data.data,
+  })
+}
+
+const fetchUsersById = async ({ userId }: { userId: string | undefined }) => {
+  const response = await httpClient.get<GlobalResponse<UserInfo>>(
+    `${API_LIST.user.all}/${userId}`,
+  )
+  return response
+}
+
+const useFetchUsersById = ({ userId }: { userId: string | undefined }) => {
+  return useQuery({
+    queryKey: [API_LIST.user.all, userId],
+    queryFn: () => fetchUsersById({ userId }),
+    select: (data) => data.data.data,
+    enabled: !!userId,
   })
 }
 
@@ -38,4 +55,4 @@ const useUpdateBanStatus = () => {
   })
 }
 
-export { useFetchAllUsers, useUpdateBanStatus }
+export { useFetchAllUsers, useFetchUsersById, useUpdateBanStatus }

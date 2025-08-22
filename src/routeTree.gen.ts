@@ -21,6 +21,7 @@ import { Route as AddListingIndexImport } from './routes/add-listing/index'
 
 // Create Virtual Routes
 
+const ProfileProfileIdLazyImport = createFileRoute('/profile/$profileId')()
 const PostPostIdLazyImport = createFileRoute('/post/$postId')()
 const AdminUsersManageIndexLazyImport = createFileRoute(
   '/admin/users/manage/',
@@ -33,6 +34,9 @@ const AdminPostsPendingIndexLazyImport = createFileRoute(
 )()
 const AdminPostsApprovedIndexLazyImport = createFileRoute(
   '/admin/posts/approved/',
+)()
+const AdminUsersManageProfileIdLazyImport = createFileRoute(
+  '/admin/users/manage/$profileId',
 )()
 const AdminPostsPendingPostIdLazyImport = createFileRoute(
   '/admin/posts/pending/$postId',
@@ -77,6 +81,14 @@ const AddListingIndexRoute = AddListingIndexImport.update({
   import('./routes/add-listing/index.lazy').then((d) => d.Route),
 )
 
+const ProfileProfileIdLazyRoute = ProfileProfileIdLazyImport.update({
+  id: '/profile/$profileId',
+  path: '/profile/$profileId',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/profile/$profileId.lazy').then((d) => d.Route),
+)
+
 const PostPostIdLazyRoute = PostPostIdLazyImport.update({
   id: '/post/$postId',
   path: '/post/$postId',
@@ -119,6 +131,15 @@ const AdminPostsApprovedIndexLazyRoute =
     import('./routes/admin/posts/approved/index.lazy').then((d) => d.Route),
   )
 
+const AdminUsersManageProfileIdLazyRoute =
+  AdminUsersManageProfileIdLazyImport.update({
+    id: '/admin/users/manage/$profileId',
+    path: '/admin/users/manage/$profileId',
+    getParentRoute: () => rootRoute,
+  } as any).lazy(() =>
+    import('./routes/admin/users/manage/$profileId.lazy').then((d) => d.Route),
+  )
+
 const AdminPostsPendingPostIdLazyRoute =
   AdminPostsPendingPostIdLazyImport.update({
     id: '/admin/posts/pending/$postId',
@@ -153,6 +174,13 @@ declare module '@tanstack/react-router' {
       path: '/post/$postId'
       fullPath: '/post/$postId'
       preLoaderRoute: typeof PostPostIdLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/profile/$profileId': {
+      id: '/profile/$profileId'
+      path: '/profile/$profileId'
+      fullPath: '/profile/$profileId'
+      preLoaderRoute: typeof ProfileProfileIdLazyImport
       parentRoute: typeof rootRoute
     }
     '/add-listing/': {
@@ -197,6 +225,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminPostsPendingPostIdLazyImport
       parentRoute: typeof rootRoute
     }
+    '/admin/users/manage/$profileId': {
+      id: '/admin/users/manage/$profileId'
+      path: '/admin/users/manage/$profileId'
+      fullPath: '/admin/users/manage/$profileId'
+      preLoaderRoute: typeof AdminUsersManageProfileIdLazyImport
+      parentRoute: typeof rootRoute
+    }
     '/admin/posts/approved/': {
       id: '/admin/posts/approved/'
       path: '/admin/posts/approved'
@@ -233,12 +268,14 @@ declare module '@tanstack/react-router' {
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/post/$postId': typeof PostPostIdLazyRoute
+  '/profile/$profileId': typeof ProfileProfileIdLazyRoute
   '/add-listing': typeof AddListingIndexRoute
   '/admin': typeof AdminIndexRoute
   '/search': typeof SearchIndexRoute
   '/shed-register': typeof ShedRegisterIndexRoute
   '/admin/posts/approved/$postId': typeof AdminPostsApprovedPostIdLazyRoute
   '/admin/posts/pending/$postId': typeof AdminPostsPendingPostIdLazyRoute
+  '/admin/users/manage/$profileId': typeof AdminUsersManageProfileIdLazyRoute
   '/admin/posts/approved': typeof AdminPostsApprovedIndexLazyRoute
   '/admin/posts/pending': typeof AdminPostsPendingIndexLazyRoute
   '/admin/posts/rejected': typeof AdminPostsRejectedIndexLazyRoute
@@ -248,12 +285,14 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/post/$postId': typeof PostPostIdLazyRoute
+  '/profile/$profileId': typeof ProfileProfileIdLazyRoute
   '/add-listing': typeof AddListingIndexRoute
   '/admin': typeof AdminIndexRoute
   '/search': typeof SearchIndexRoute
   '/shed-register': typeof ShedRegisterIndexRoute
   '/admin/posts/approved/$postId': typeof AdminPostsApprovedPostIdLazyRoute
   '/admin/posts/pending/$postId': typeof AdminPostsPendingPostIdLazyRoute
+  '/admin/users/manage/$profileId': typeof AdminUsersManageProfileIdLazyRoute
   '/admin/posts/approved': typeof AdminPostsApprovedIndexLazyRoute
   '/admin/posts/pending': typeof AdminPostsPendingIndexLazyRoute
   '/admin/posts/rejected': typeof AdminPostsRejectedIndexLazyRoute
@@ -264,12 +303,14 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/post/$postId': typeof PostPostIdLazyRoute
+  '/profile/$profileId': typeof ProfileProfileIdLazyRoute
   '/add-listing/': typeof AddListingIndexRoute
   '/admin/': typeof AdminIndexRoute
   '/search/': typeof SearchIndexRoute
   '/shed-register/': typeof ShedRegisterIndexRoute
   '/admin/posts/approved/$postId': typeof AdminPostsApprovedPostIdLazyRoute
   '/admin/posts/pending/$postId': typeof AdminPostsPendingPostIdLazyRoute
+  '/admin/users/manage/$profileId': typeof AdminUsersManageProfileIdLazyRoute
   '/admin/posts/approved/': typeof AdminPostsApprovedIndexLazyRoute
   '/admin/posts/pending/': typeof AdminPostsPendingIndexLazyRoute
   '/admin/posts/rejected/': typeof AdminPostsRejectedIndexLazyRoute
@@ -281,12 +322,14 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/post/$postId'
+    | '/profile/$profileId'
     | '/add-listing'
     | '/admin'
     | '/search'
     | '/shed-register'
     | '/admin/posts/approved/$postId'
     | '/admin/posts/pending/$postId'
+    | '/admin/users/manage/$profileId'
     | '/admin/posts/approved'
     | '/admin/posts/pending'
     | '/admin/posts/rejected'
@@ -295,12 +338,14 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/post/$postId'
+    | '/profile/$profileId'
     | '/add-listing'
     | '/admin'
     | '/search'
     | '/shed-register'
     | '/admin/posts/approved/$postId'
     | '/admin/posts/pending/$postId'
+    | '/admin/users/manage/$profileId'
     | '/admin/posts/approved'
     | '/admin/posts/pending'
     | '/admin/posts/rejected'
@@ -309,12 +354,14 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/post/$postId'
+    | '/profile/$profileId'
     | '/add-listing/'
     | '/admin/'
     | '/search/'
     | '/shed-register/'
     | '/admin/posts/approved/$postId'
     | '/admin/posts/pending/$postId'
+    | '/admin/users/manage/$profileId'
     | '/admin/posts/approved/'
     | '/admin/posts/pending/'
     | '/admin/posts/rejected/'
@@ -325,12 +372,14 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   PostPostIdLazyRoute: typeof PostPostIdLazyRoute
+  ProfileProfileIdLazyRoute: typeof ProfileProfileIdLazyRoute
   AddListingIndexRoute: typeof AddListingIndexRoute
   AdminIndexRoute: typeof AdminIndexRoute
   SearchIndexRoute: typeof SearchIndexRoute
   ShedRegisterIndexRoute: typeof ShedRegisterIndexRoute
   AdminPostsApprovedPostIdLazyRoute: typeof AdminPostsApprovedPostIdLazyRoute
   AdminPostsPendingPostIdLazyRoute: typeof AdminPostsPendingPostIdLazyRoute
+  AdminUsersManageProfileIdLazyRoute: typeof AdminUsersManageProfileIdLazyRoute
   AdminPostsApprovedIndexLazyRoute: typeof AdminPostsApprovedIndexLazyRoute
   AdminPostsPendingIndexLazyRoute: typeof AdminPostsPendingIndexLazyRoute
   AdminPostsRejectedIndexLazyRoute: typeof AdminPostsRejectedIndexLazyRoute
@@ -340,12 +389,14 @@ export interface RootRouteChildren {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   PostPostIdLazyRoute: PostPostIdLazyRoute,
+  ProfileProfileIdLazyRoute: ProfileProfileIdLazyRoute,
   AddListingIndexRoute: AddListingIndexRoute,
   AdminIndexRoute: AdminIndexRoute,
   SearchIndexRoute: SearchIndexRoute,
   ShedRegisterIndexRoute: ShedRegisterIndexRoute,
   AdminPostsApprovedPostIdLazyRoute: AdminPostsApprovedPostIdLazyRoute,
   AdminPostsPendingPostIdLazyRoute: AdminPostsPendingPostIdLazyRoute,
+  AdminUsersManageProfileIdLazyRoute: AdminUsersManageProfileIdLazyRoute,
   AdminPostsApprovedIndexLazyRoute: AdminPostsApprovedIndexLazyRoute,
   AdminPostsPendingIndexLazyRoute: AdminPostsPendingIndexLazyRoute,
   AdminPostsRejectedIndexLazyRoute: AdminPostsRejectedIndexLazyRoute,
@@ -364,12 +415,14 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/post/$postId",
+        "/profile/$profileId",
         "/add-listing/",
         "/admin/",
         "/search/",
         "/shed-register/",
         "/admin/posts/approved/$postId",
         "/admin/posts/pending/$postId",
+        "/admin/users/manage/$profileId",
         "/admin/posts/approved/",
         "/admin/posts/pending/",
         "/admin/posts/rejected/",
@@ -381,6 +434,9 @@ export const routeTree = rootRoute
     },
     "/post/$postId": {
       "filePath": "post/$postId.lazy.tsx"
+    },
+    "/profile/$profileId": {
+      "filePath": "profile/$profileId.lazy.tsx"
     },
     "/add-listing/": {
       "filePath": "add-listing/index.tsx"
@@ -399,6 +455,9 @@ export const routeTree = rootRoute
     },
     "/admin/posts/pending/$postId": {
       "filePath": "admin/posts/pending/$postId.lazy.tsx"
+    },
+    "/admin/users/manage/$profileId": {
+      "filePath": "admin/users/manage/$profileId.lazy.tsx"
     },
     "/admin/posts/approved/": {
       "filePath": "admin/posts/approved/index.lazy.tsx"

@@ -74,7 +74,7 @@ const useFetchPropertyById = ({ id }: { id: string }) => {
 const fetchAllProperties = async ({
   propertyStatus,
 }: {
-  propertyStatus: PropertyStatus
+  propertyStatus?: PropertyStatus
 }) => {
   const response = await httpClient.get<GlobalResponse<ListingCardType[]>>(
     API_LIST.property.all,
@@ -86,7 +86,7 @@ const fetchAllProperties = async ({
 const useFetchAllProperties = ({
   propertyStatus,
 }: {
-  propertyStatus: PropertyStatus
+  propertyStatus?: PropertyStatus
 }) => {
   return useQuery({
     queryKey: [API_LIST.property.all, propertyStatus],
