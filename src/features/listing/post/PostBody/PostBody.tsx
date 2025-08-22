@@ -2,6 +2,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import NoAvatarSVG from '@/assets/user/no_avatar.svg'
 import type { PostCommonProps } from '../types'
 import { MailIcon, NotepadTextDashedIcon, PhoneIcon } from 'lucide-react'
+import { Link } from '@tanstack/react-router'
 
 export const PostBody = ({ data }: PostCommonProps) => {
   const {
@@ -39,10 +40,12 @@ export const PostBody = ({ data }: PostCommonProps) => {
       </div>
 
       <div className="hstack gap-3">
-        <Avatar className="w-[35px] h-[35px]">
-          <AvatarImage src={NoAvatarSVG} alt="@shadcn" />
-          <AvatarFallback>CN</AvatarFallback>
-        </Avatar>
+        <Link to={'/profile/$profileId'} params={{ profileId: data.user.id }}>
+          <Avatar className="w-[35px] h-[35px]">
+            <AvatarImage src={NoAvatarSVG} alt="@shadcn" />
+            <AvatarFallback>CN</AvatarFallback>
+          </Avatar>
+        </Link>
         <div className="text-xs">
           <p className="text-sm">
             Posted by{' '}

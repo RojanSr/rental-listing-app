@@ -130,7 +130,7 @@ const ListingSteps = () => {
           navigate({ to: '/' })
           setOpen(false)
         }}
-        message="Your property has been added successfully!"
+        message="Your property has been sent for a review"
       />
     </>
   )
