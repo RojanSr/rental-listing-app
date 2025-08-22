@@ -4,6 +4,7 @@ import { createFileRoute, redirect } from '@tanstack/react-router'
 import { useState } from 'react'
 import type { Category } from '@/types'
 import { UserEnum } from '@/enums/user'
+import { PageWrapper } from '@/components/ui/page-wrapper'
 
 export type FilterType = Category | 'all'
 
@@ -19,7 +20,7 @@ export const Route = createFileRoute('/')({
 function App() {
   const [selectedCategory, setSelectedCategory] = useState<FilterType>('all')
   return (
-    <div>
+    <PageWrapper>
       <div className="app-container">
         <div className="flex justify-center pb-3 mb-3 sticky top-[90px] bg-white z-10">
           <ListingFilter
@@ -29,6 +30,6 @@ function App() {
         </div>
         <Listing selectedCategory={selectedCategory} />
       </div>
-    </div>
+    </PageWrapper>
   )
 }

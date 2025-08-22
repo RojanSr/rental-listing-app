@@ -32,8 +32,11 @@ const INITIAL_SEARCH_STATE = {
 const Navbar = () => {
   const { isAuthenticated, logout } = useAuth()
   const { pathname } = useLocation()
-  const { user } = useRouter().options.context
-  console.log(user)
+  const {
+    options: {
+      context: { user },
+    },
+  } = useRouter()
   const { showNavSearch } = useShowNavSearch(pathname)
   const [authDialogOpen, toggleAuthDialog] = useState<AuthDialogState>({
     authType: 'login',
@@ -88,6 +91,13 @@ const Navbar = () => {
                 </DropdownMenuItem>
                 <DropdownMenuSeparator className="bg-zinc-300" />
               </>
+            )}
+            {isAuthenticated && user && (
+              <Link to="/profile/$profileId" params={{ profileId: user.id }}>
+                <DropdownMenuItem className="px-3 py-4 text-sm rounded-none">
+                  My Profile
+                </DropdownMenuItem>
+              </Link>
             )}
             {isAuthenticated && user?.role === 1 && (
               <Link to="/add-listing">

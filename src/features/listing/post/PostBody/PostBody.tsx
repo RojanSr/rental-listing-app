@@ -2,6 +2,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import NoAvatarSVG from '@/assets/user/no_avatar.svg'
 import type { PostCommonProps } from '../types'
 import { MailIcon, NotepadTextDashedIcon, PhoneIcon } from 'lucide-react'
+import { Link } from '@tanstack/react-router'
 
 export const PostBody = ({ data }: PostCommonProps) => {
   const {
@@ -28,11 +29,7 @@ export const PostBody = ({ data }: PostCommonProps) => {
             <div className="hstack gap-1 text-sm">
               <p className="capitalize">{roomCategory}</p>
               <p>•</p>
-              <p>{numberOfRoom} bedroom</p>
-              <p>•</p>
-              <p>1 hall</p>
-              <p>•</p>
-              <p>1 kitchen</p>
+              <p>{`${numberOfRoom} Room${numberOfRoom ? 's' : ''}`}</p>
             </div>
           </div>
           <p className="text-2xl font-medium">
@@ -43,15 +40,18 @@ export const PostBody = ({ data }: PostCommonProps) => {
       </div>
 
       <div className="hstack gap-3">
-        <Avatar className="w-[35px] h-[35px]">
-          <AvatarImage src={NoAvatarSVG} alt="@shadcn" />
-          <AvatarFallback>CN</AvatarFallback>
-        </Avatar>
+        <Link to={'/profile/$profileId'} params={{ profileId: data.user.id }}>
+          <Avatar className="w-[35px] h-[35px]">
+            <AvatarImage src={NoAvatarSVG} alt="@shadcn" />
+            <AvatarFallback>CN</AvatarFallback>
+          </Avatar>
+        </Link>
         <div className="text-xs">
-          <p className="text-sm font-medium">
-            Posted by <span className="capitalize">{user.fullName}</span>
+          <p className="text-sm">
+            Posted by{' '}
+            <span className="capitalize font-medium">{user.fullName}</span>
           </p>
-          <p>8 days ago</p>
+          <p>Just now</p>
         </div>
       </div>
 

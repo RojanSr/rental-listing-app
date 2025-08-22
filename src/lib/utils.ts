@@ -1,6 +1,8 @@
 import { clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 import type { ClassValue } from 'clsx'
+import type { UserEnum } from '@/enums/user'
+import { PropertyStatus } from '@/enums/post'
 
 export function cn(...inputs: Array<ClassValue>) {
   return twMerge(clsx(inputs))
@@ -19,5 +21,27 @@ export const copyToClipboard = async (text: string) => {
     await navigator.clipboard.writeText(text)
   } catch (err) {
     console.error('Failed to copy text:', err)
+  }
+}
+
+export const getUserRole = (role: UserEnum) => {
+  switch (role) {
+    case 0:
+      return 'Super Admin'
+    case 1:
+      return 'Lister'
+    case 2:
+      return 'User'
+  }
+}
+
+export const getPropertyStatusLabel = (status: PropertyStatus) => {
+  switch (status) {
+    case 1:
+      return 'Pending'
+    case 2:
+      return 'Approved'
+    case 3:
+      return 'Rejected'
   }
 }

@@ -1,26 +1,24 @@
 import { PageWrapper } from '@/components/ui/page-wrapper'
-import { AdminPostAction } from '@/features/admin/posts'
-import PostViewById from '@/features/listing/post/PostViewById'
+import { UserProfile } from '@/features/profile'
 import { createLazyFileRoute, Link } from '@tanstack/react-router'
 import { ChevronLeftIcon } from 'lucide-react'
 
-export const Route = createLazyFileRoute('/admin/posts/approved/$postId')({
+export const Route = createLazyFileRoute('/admin/users/manage/$profileId')({
   component: RouteComponent,
 })
 
 function RouteComponent() {
-  const { postId } = Route.useParams()
+  const { profileId } = Route.useParams()
 
   return (
     <PageWrapper>
-      <div className="my-8">
+      <div className="app-container mt-4">
         <div className="mx-12 mb-8 rounded-full hover:bg-neutral-100 w-fit">
-          <Link to="/admin/posts/pending">
+          <Link to="/admin/users/manage">
             <ChevronLeftIcon size={32} />
           </Link>
         </div>
-        <PostViewById postId={postId} />
-        <AdminPostAction from={'approved'} postId={postId} />
+        <UserProfile profileId={profileId} />
       </div>
     </PageWrapper>
   )

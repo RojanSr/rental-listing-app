@@ -19,4 +19,5 @@ export type UserInfo = {
   createdAt: string
   updatedAt: string
   isBanned: boolean
+  role: UserEnum
 }
