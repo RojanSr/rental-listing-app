@@ -2,12 +2,10 @@ import type { MyRouterContext } from '@/routes/__root'
 import { MyInfo } from './info'
 import { ProfileListings } from './listings'
 import { useRouter } from '@tanstack/react-router'
-import { UserEnum } from '@/enums/user'
 
 export const UserProfile = ({ profileId }: { profileId: string }) => {
   const { user } = useRouter().options.context as MyRouterContext
-
-  const isUser = user?.role === UserEnum.User
+  const isViewingOwnProfile = user?.id === profileId
 
   return (
     <div className="mx-20 mb-10">
@@ -17,7 +15,8 @@ export const UserProfile = ({ profileId }: { profileId: string }) => {
       </p>
       <div className="max-w-[1200px] mx-auto">
         <MyInfo profileId={profileId} />
-        {!isUser && <ProfileListings className="my-6 px-6 py-3" />}
+        {/* For now only own listed property is shown in profile */}
+        {isViewingOwnProfile && <ProfileListings className="my-6 px-6 py-3" />}
       </div>
     </div>
   )

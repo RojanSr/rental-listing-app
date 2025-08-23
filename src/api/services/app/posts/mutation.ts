@@ -4,6 +4,7 @@ import { failToast } from '@/lib/toaster'
 import type { GlobalResponse } from '@/types'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import type { AxiosError } from 'axios'
+import type { ReviewPayload } from '../types'
 
 const addProperty = async (payload: FormData) => {
   try {
@@ -40,4 +41,28 @@ const useDeleteProperty = () => {
   })
 }
 
-export { useAddProperty, useDeleteProperty }
+const reviewProperty = async ({
+  postId,
+  payload,
+}: {
+  postId: string
+  payload: ReviewPayload
+}) => {
+  if (!postId) return
+  await httpClient.put(`${API_LIST.property.review}/${postId}`, payload)
+}
+
+const useReviewProperty = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: reviewProperty,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [API_LIST.property.all],
+        exact: false,
+      })
+    },
+  })
+}
+
+export { useAddProperty, useDeleteProperty, useReviewProperty }

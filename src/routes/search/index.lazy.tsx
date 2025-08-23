@@ -7,8 +7,9 @@ import ListingCard from '@/features/listing/card/ListingCard'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useFetchNearestProperties } from '@/api/services/app/posts/queries'
 import { cn } from '@/lib/utils'
-import type { CoordinateType, ListingCardType } from '@/types'
-import { RecenterMap } from '@/lib/leaflet'
+import type { ListingCardType, VisibleMapView } from '@/types'
+import { RadiusUpdater } from '@/lib/leaflet'
+import { SearchPageSkeleton } from '@/features/listing/search/search_page_skeleton'
 
 // Fix default icon issue
 delete (L.Icon.Default.prototype as any)._getIconUrl
@@ -61,39 +62,34 @@ export const Route = createLazyFileRoute('/search/')({
 })
 
 function RouteComponent() {
-  const { query, lat, lon } = Route.useSearch()
+  const { query, lat: latParam, lon: lonParam } = Route.useSearch()
   const navigate = useNavigate()
-
-  const [center, setCenter] = useState<CoordinateType & { location: string }>({
-    lat: lat || 0,
-    lon: lon || 0,
-    location: '',
-  })
   const [activeStyle, setActiveStyle] = useState<string>('googleStreets')
-
-  const { data, isLoading } = useFetchNearestProperties({
-    userLat: lat,
-    userLong: lon,
+  const [mapView, setMapView] = useState<VisibleMapView>({
+    center: { lat: latParam || 0, lon: lonParam || 0 },
+    radius: 1000,
+    zoom: 16,
   })
+
+  const { data, isLoading } = useFetchNearestProperties(mapView)
+
+  const { lat, lon } = mapView.center
 
   const handlePropertyClick = ({
     latitude,
     longitude,
     id,
-    roomCategory,
-    address,
   }: Pick<
     ListingCardType,
     'latitude' | 'longitude' | 'id' | 'roomCategory' | 'address'
   >) => {
-    if (latitude === center.lat && longitude === center.lon) {
+    if (latitude === lat && longitude === lon) {
       navigate({ to: '/post/$postId', params: { postId: id } })
     } else {
-      setCenter({
-        lat: latitude,
-        lon: longitude,
-        location: `${roomCategory} in ${address}`,
-      })
+      setMapView((prev) => ({
+        ...prev,
+        center: { lat: latitude, lon: longitude },
+      }))
     }
   }
 
@@ -106,19 +102,19 @@ function RouteComponent() {
   }
 
   if (isLoading) {
-    return <p className="text-center font-semibold text-2xl">Fetching</p>
+    return <SearchPageSkeleton />
   }
 
   return (
     <div key={query} className="app-container">
       <div className="flex gap-4 flex-col md:flex-row">
-        <div className={data ? 'flex-1/12' : 'flex-1'}>
+        <div className={'flex-1/12'}>
           <p className="pb-4 text-lg sticky top-[95px] bg-white z-10">
             Results for {query}
           </p>
           <AnimatePresence initial={false}>
             {data ? (
-              <div className="grid grid-cols-[repeat(auto-fill,_minmax(230px,_1fr))] gap-4">
+              <div className="grid grid-cols-[repeat(auto-fill,_minmax(200px,_1fr))] gap-4">
                 {data.map((listing) => (
                   <motion.div
                     key={listing.id}
@@ -148,11 +144,11 @@ function RouteComponent() {
           </AnimatePresence>
         </div>
         <div
-          className={cn('flex-1 h-[30dvh] md:h-[88vh] sticky top-[104px]', {
-            'flex-2/6': !data,
-          })}
+          className={cn(
+            'flex-1 h-[30dvh] md:h-[88vh] sticky top-[104px] flex justify-end',
+          )}
         >
-          <div className="absolute z-10 bottom-0 ">
+          <div className="absolute z-10 bottom-0">
             <select
               value={activeStyle}
               onChange={(e) => setActiveStyle(e.target.value)}
@@ -167,9 +163,8 @@ function RouteComponent() {
           </div>
           <MapContainer
             center={[lat, lon]}
-            zoom={16}
-            // className="rounded-3xl"
-            className="rounded-3xl h-full w-full"
+            zoom={mapView.zoom}
+            className="rounded-3xl h-full w-[1000px]"
           >
             <TileLayer
               url={mapStyles[activeStyle as keyof typeof mapStyles].url}
@@ -177,6 +172,9 @@ function RouteComponent() {
                 mapStyles[activeStyle as keyof typeof mapStyles].attribution
               }
             />
+
+            <RadiusUpdater onViewChange={(view) => setMapView(view)} />
+
             {data?.map((listing) => (
               <Marker
                 key={listing.id}
@@ -196,15 +194,8 @@ function RouteComponent() {
                 </Popup>
               </Marker>
             ))}
-            <RecenterMap
-              lat={center.lat}
-              lon={center.lon}
-              popupContent={
-                center.location
-                  ? `<strong style="text-transform:capitalize">${center.location}</strong>`
-                  : ''
-              }
-            />
+
+            {/* <RecenterMap lat={lat} lon={lon} popupContent={''} /> */}
           </MapContainer>
         </div>
       </div>
