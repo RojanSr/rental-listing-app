@@ -1,9 +1,9 @@
 import API_LIST from '@/api/api_list'
 import { httpClient } from '@/api/clients/http-client'
 import type { FilterType } from '@/routes'
-import type { GlobalResponse, ListingCardType } from '@/types'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import type { PropertyDetailByID, ReviewPayload } from '../types'
+import type { GlobalResponse, ListingCardType, VisibleMapView } from '@/types'
+import { useQuery } from '@tanstack/react-query'
+import type { PropertyDetailByID } from '../types'
 import type { PropertyStatus } from '@/enums/post'
 
 const fetchApprovedProperties = async ({
@@ -26,31 +26,22 @@ const useFetchApprovedProperties = ({ category }: { category: FilterType }) => {
   })
 }
 
-const fetchNearestProperties = async ({
-  userLat,
-  userLong,
-}: {
-  userLat: number | undefined
-  userLong: number | undefined
-}) => {
-  if (!userLat || !userLong) return
+const fetchNearestProperties = async (mapView: VisibleMapView) => {
+  if (!mapView.center.lat || !mapView.center.lon || !mapView.radius) return
+  const lat = mapView.center.lat
+  const lon = mapView.center.lon
+  const radius = mapView.radius
   const response = await httpClient.get<GlobalResponse<ListingCardType[]>>(
     API_LIST.property.nearest,
-    { params: { userLat, userLong } },
+    { params: { userLat: lat, userLong: lon, radiusMeters: radius } },
   )
   return response
 }
 
-const useFetchNearestProperties = ({
-  userLat,
-  userLong,
-}: {
-  userLat: number | undefined
-  userLong: number | undefined
-}) => {
+const useFetchNearestProperties = (mapView: VisibleMapView) => {
   return useQuery({
-    queryKey: [API_LIST.property.nearest, userLat, userLong],
-    queryFn: () => fetchNearestProperties({ userLat, userLong }),
+    queryKey: [API_LIST.property.nearest, { ...mapView }],
+    queryFn: () => fetchNearestProperties(mapView),
     select: (data) => data?.data.data,
   })
 }
@@ -95,33 +86,9 @@ const useFetchAllProperties = ({
   })
 }
 
-const reviewProperty = async ({
-  postId,
-  payload,
-}: {
-  postId: string
-  payload: ReviewPayload
-}) => {
-  if (!postId) return
-  await httpClient.put(`${API_LIST.property.review}/${postId}`, payload)
-}
-
-const useReviewProperty = ({ postId }: { postId: string }) => {
-  const queryClient = useQueryClient()
-  return useMutation({
-    mutationFn: reviewProperty,
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: [API_LIST.property.all, postId],
-      })
-    },
-  })
-}
-
 export {
   useFetchApprovedProperties,
   useFetchNearestProperties,
   useFetchPropertyById,
   useFetchAllProperties,
-  useReviewProperty,
 }

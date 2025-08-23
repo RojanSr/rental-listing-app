@@ -15,7 +15,7 @@ function RouteComponent() {
     <PageWrapper>
       <div className="my-8">
         <div className="mx-12 mb-8 rounded-full hover:bg-neutral-100 w-fit">
-          <Link to="/admin/posts/pending">
+          <Link to="/admin/posts/approved">
             <ChevronLeftIcon size={32} />
           </Link>
         </div>
