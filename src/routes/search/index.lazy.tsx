@@ -2,7 +2,7 @@ import { createLazyFileRoute, Link, useNavigate } from '@tanstack/react-router'
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import ListingCard from '@/features/listing/card/ListingCard'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useFetchNearestProperties } from '@/api/services/app/posts/queries'
@@ -10,6 +10,8 @@ import { cn } from '@/lib/utils'
 import type { ListingCardType, VisibleMapView } from '@/types'
 import { RadiusUpdater } from '@/lib/leaflet'
 import { SearchPageSkeleton } from '@/features/listing/search/search_page_skeleton'
+import { Button } from '@/components/ui/button'
+import { SendIcon } from 'lucide-react'
 
 // Fix default icon issue
 delete (L.Icon.Default.prototype as any)._getIconUrl
@@ -75,6 +77,14 @@ function RouteComponent() {
 
   const { lat, lon } = mapView.center
 
+  useEffect(() => {
+    if (latParam && lonParam)
+      setMapView((prev) => ({
+        ...prev,
+        center: { lat: latParam, lon: lonParam },
+      }))
+  }, [latParam, lonParam])
+
   const handlePropertyClick = ({
     latitude,
     longitude,
@@ -137,9 +147,20 @@ function RouteComponent() {
                 ))}
               </div>
             ) : (
-              <p className="text-center font-semibold text-2xl whitespace-nowrap mt-6">
-                No listing around given location
-              </p>
+              <div className="flex flex-col items-center gap-3">
+                <p className="text-center font-semibold text-2xl whitespace-nowrap mt-6">
+                  No listing around given location
+                </p>
+                <Button
+                  className="secondary-btn"
+                  onClick={() =>
+                    setMapView((prev) => ({ ...prev, radius: 10000000 }))
+                  }
+                >
+                  <SendIcon />
+                  Find nearest instead
+                </Button>
+              </div>
             )}
           </AnimatePresence>
         </div>
